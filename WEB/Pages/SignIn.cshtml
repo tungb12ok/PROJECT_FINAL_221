@@ -1,0 +1,25 @@
+﻿@page
+@model WEB.Pages.SignInModel
+@{
+}
+
+<form method="post" class="container mt-4">
+    <h2>Sing In</h2>
+    <div class="mb-3">
+        <label class="form-label" asp-for="User.Username">Username</label>
+        <input type="text" class="form-control" asp-for="User.Username">
+        <span asp-validation-for="User.Username" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="User.PasswordHash">Password</label>
+        <input type="password" class="form-control" asp-for="User.PasswordHash">
+        <span asp-validation-for="User.PasswordHash" class="text-danger"></span>
+    </div>
+    </br>
+    <p class="text-danger bg-danger bg-opacity-10">@Model.Mess</p>
+
+    <button type="submit" class="btn btn-primary">SignIn</button>
+    <a asp-page="/SignUp" class="btn btn-danger m-4">SignUp</a>
+
+
+</form>

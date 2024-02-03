@@ -1,0 +1,23 @@
+﻿@page
+@model WEB.Pages.SignUpModel
+@{
+}
+<form method="post" class="container mt-4">
+    <h2>Register</h2>
+    <div class="mb-3">
+        <label class="form-label" asp-for="User.Username">Username</label>
+        <input type="text" class="form-control" asp-for="User.Username">
+        <span asp-validation-for="User.Username" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="User.Email">Email</label>
+        <input type="email" class="form-control" asp-for="User.Email">
+        <span asp-validation-for="User.Email" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="User.PasswordHash">Password</label>
+        <input type="password" class="form-control" asp-for="User.PasswordHash">
+        <span asp-validation-for="User.PasswordHash" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Register</button>
+</form>

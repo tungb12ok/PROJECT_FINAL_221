@@ -1,0 +1,45 @@
+﻿@page
+@model WEB.Pages.ProfileModel
+@{
+}
+<h2>User Profile</h2>
+<!-- Thông tin cá nhân -->
+<form action="submit-profile-info" method="POST">
+    <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" class="form-control" id="username" name="username" placeholder="Your Username" readonly>
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="Your Email" readonly>
+    </div>
+</form>
+
+<!-- Đổi mật khẩu -->
+<h2>Change Password</h2>
+<form action="submit-new-password" method="POST">
+    <div class="mb-3">
+        <label for="currentPassword" class="form-label">Current Password</label>
+        <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
+    </div>
+    <div class="mb-3">
+        <label for="newPassword" class="form-label">New Password</label>
+        <input type="password" class="form-control" id="newPassword" name="newPassword" required>
+    </div>
+    <div class="mb-3">
+        <label for="confirmNewPassword" class="form-label">Confirm New Password</label>
+        <input type="password" class="form-control" id="confirmNewPassword" name="confirmNewPassword" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Change Password</button>
+</form>
+
+<!-- Nạp tiền -->
+<h2>Deposit Funds</h2>
+<form action="submit-deposit" method="POST">
+    <div class="mb-3">
+        <label for="amount" class="form-label">Amount</label>
+        <input type="number" class="form-control" id="amount" name="amount" step="0.01" min="1" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Deposit</button>
+</form>
+    </div>
