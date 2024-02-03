@@ -11,4 +11,9 @@
     <ProjectReference Include="..\Exe\Exe.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\Admin\" />
+    <Folder Include="Pages\Manager\" />
+  </ItemGroup>
+
 </Project>
