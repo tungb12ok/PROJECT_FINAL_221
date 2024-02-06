@@ -1,53 +1,32 @@
-﻿using ClosedXML.Excel;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Timers;
+﻿using System;
+using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace Exe
+namespace WEB.Services
 {
-    public class TimerService : BackgroundService
+    public class CheckingPayment
     {
-        private readonly IServiceProvider _serviceProvider;
+        private static string AccessToken { get; set; }
+        private static DateTime AccessTokenExpiration { get; set; }
 
-        public TimerService(IServiceProvider serviceProvider)
+        public async Task<string> ExeServiceAsync()
         {
-            _serviceProvider = serviceProvider;
-        }
-        public string username = "0972074620";
-        public string password = "Tungld123@123";
-
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            while (!stoppingToken.IsCancellationRequested)
+            // Kiểm tra xem đã có AccessToken và chưa hết hạn chưa
+            if (string.IsNullOrEmpty(AccessToken) || AccessTokenExpiration <= DateTime.UtcNow)
             {
-                var accessToken = await LoginAsync(username, password);
-
-                var json = await GetDataAsync(accessToken);
-
-                string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
-
-                File.WriteAllText("output.json", json);
-
-                await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
+                while (true)
+                {
+                    // Nếu chưa có hoặc đã hết hạn, thực hiện đăng nhập
+                    AccessToken = await LoginAsync(username, password);
+                }
             }
+
+            // Sau đó, sử dụng AccessToken để thực hiện các yêu cầu khác
+            return await GetDataAsync(AccessToken);
         }
 
-
-        public override async Task StopAsync(CancellationToken cancellationToken)
-        {
-            await base.StopAsync(cancellationToken);
-        }
-        static async Task<string> LoginAsync(string username, string password)
+        async Task<string> LoginAsync(string username, string password)
         {
             try
             {
@@ -71,7 +50,6 @@ namespace Exe
                     if (response.IsSuccessStatusCode)
                     {
                         string responseData = await response.Content.ReadAsStringAsync();
-
                         // Extract the access token from the response
                         var tokenResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<TokenResponse>(responseData);
                         var accessToken = tokenResponse?.access_token;
@@ -91,7 +69,7 @@ namespace Exe
             return null;
         }
 
-        static async Task<string> GetDataAsync(string accessToken)
+        async Task<string> GetDataAsync(string accessToken)
         {
             try
             {
@@ -142,4 +120,3 @@ namespace Exe
         }
     }
 }
-    

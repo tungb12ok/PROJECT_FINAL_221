@@ -7,8 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<QuickMarketContext>();
 builder.Services.AddRazorPages();
 
-//builder.Services.AddHostedService<TimerService>();
-
+builder.Services.AddHostedService<TimerService>();
 
 // Add session and necessary services
 builder.Services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache

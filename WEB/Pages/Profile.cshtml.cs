@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using WEB.Extenstions;
 using BussinessLogic.Repository;
+using DocumentFormat.OpenXml.Bibliography;
+using WEB.Services;
 namespace WEB.Pages
 {
     public class ProfileModel : PageModel
@@ -47,6 +49,7 @@ namespace WEB.Pages
         }
         public IActionResult OnPostPaid()
         {
+            CheckingPayment c = new CheckingPayment();
             // Xử lý logic cho Action 2
             var financialTrans = new FinancialTransaction
             {
@@ -59,6 +62,8 @@ namespace WEB.Pages
             };
             try
             {
+                CheckingPaymentService cs = new CheckingPaymentService();
+                cs.checkingPayment();
                 ft.toUpFinancialTransactions(financialTrans);
             }
             catch (Exception ex)
