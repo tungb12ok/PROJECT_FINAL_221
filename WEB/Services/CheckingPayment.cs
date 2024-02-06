@@ -7,11 +7,14 @@ namespace WEB.Services
 {
     public class CheckingPayment
     {
+        string username = "0972074620";
+        string password = "Tungld123@123";
         private static string AccessToken { get; set; }
         private static DateTime AccessTokenExpiration { get; set; }
 
         public async Task<string> ExeServiceAsync()
         {
+            
             // Kiểm tra xem đã có AccessToken và chưa hết hạn chưa
             if (string.IsNullOrEmpty(AccessToken) || AccessTokenExpiration <= DateTime.UtcNow)
             {
