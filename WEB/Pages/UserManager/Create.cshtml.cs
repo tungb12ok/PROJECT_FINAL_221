@@ -26,13 +26,13 @@ namespace WEB.Pages.UserManager
         }
 
         [BindProperty]
-        public Product Product { get; set; } = default!;
+        public Product? Product { get; set; } = default!;
         
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid || _context.Products == null || Product == null)
+          if ( _context.Products == null || Product == null)
             {
                 return Page();
             }
