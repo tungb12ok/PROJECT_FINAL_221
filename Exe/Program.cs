@@ -1,107 +1,129 @@
 ﻿using System;
-using System.IO;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using System.Threading;
-using Exe;
-using Newtonsoft.Json;
-using ClosedXML.Excel;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 
 class Program
 {
-    static void Main(string[] args)
+    public static string username = "0972074620";
+    public static string password = "Tungld123@123";
+    static async Task Main(string[] args)
     {
-        runLogin();
-        saveJson();
-    }
-    public static void saveJson()
-    {
-        string[] accountEnquiryFiles = Directory.GetFiles(@"D:\history", "*Account Enquiry*");
-        var sortedFiles = accountEnquiryFiles.OrderBy(f => File.GetLastWriteTime(f)).ToArray();
-
-        var filePath = @"D:\history\" + Path.GetFileName(sortedFiles[0]);
-        var transactions = new List<TransactionRecord>();
-
-        using (var workbook = new XLWorkbook(filePath))
-        {
-            var worksheet = workbook.Worksheet(1);
-            var rows = worksheet.RangeUsed().RowsUsed(); // Skip header row
-
-            foreach (var row in rows)
-            {
-                transactions.Add(new TransactionRecord
-                {
-                    TransactionDate = row.Cell("A").GetValue<string>(),
-                    EffectiveDate = row.Cell("B").GetValue<string>(),
-                    Description = row.Cell("C").GetValue<string>(),
-                    Debit = row.Cell("D").GetValue<string>(),
-                    Credit = row.Cell("E").GetValue<string>(),
-                    Balance = row.Cell("F").GetValue<string>(),
-                    CounterpartyAccount = row.Cell("G").GetValue<string>(),
-                    AccountName = row.Cell("H").GetValue<string>(),
-                    TransactionCode = row.Cell("I").GetValue<string>(),
-                });
-            }
-        }
-        string solutionDirectory = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\Exe"));
-        string jsonFilePath = Path.Combine(solutionDirectory, "dataTranssion.json");
-        jsonFilePath = jsonFilePath.Replace("bin\\Debug\\Exe\\", "");
-
-        
-        var json = JsonConvert.SerializeObject(transactions, Formatting.Indented);
-        File.WriteAllText(jsonFilePath, json);
-        foreach (var f in accountEnquiryFiles)
-        {
-            var path = @"D:\history\" + Path.GetFileName(f);
-            File.Delete(path);
-        }
-    }
-    public static void runLogin()
-    {
-        // Định nghĩa thư mục tải xuống
-        string downloadDirectory = "C:\\Users\\tungl\\Downloads";
-        // Cấu hình cho trình duyệt Chrome
-        ChromeOptions options = new ChromeOptions();
-        options.AddArgument("--start-maximized");
-        options.AddUserProfilePreference("download.default_directory", downloadDirectory);
-
-        // Đường dẫn đến ChromeDriver
-        string driverPath = @"D:\myTools\chromedriver_win32"; // Thay đổi đường dẫn này theo môi trường của bạn
-        IWebDriver driver = new ChromeDriver(driverPath, options);
-
         try
         {
-            driver.Navigate().GoToUrl("https://ebank.tpb.vn/retail/vX/main/inquiry/account/transaction?id=84802082002");
-            driver.FindElement(By.CssSelector("input[placeholder='Tên đăng nhập']")).SendKeys("0972074620");
-            driver.FindElement(By.CssSelector("input[placeholder='Mật khẩu']")).SendKeys("Tungld123@123");
-            driver.FindElement(By.CssSelector(".btn-login")).Click();
+            // The rest of your code remains unchanged
+            var accessToken = await LoginAsync(username, password);
 
-            Thread.Sleep(6000); 
+            var json = await GetDataAsync(accessToken);
 
-            IJavaScriptExecutor js = (IJavaScriptExecutor)driver;
-            driver.FindElement(By.XPath("//span[contains(text(), 'Download file giao dịch Excel')]")).Click();
+            // Save JSON to a file named "output.json"
+            File.WriteAllText("output.json", json);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("An error occurred: " + ex.Message);
+        }
+    }
 
-            Thread.Sleep(2000);     
-
-            string[] accountEnquiryFiles = Directory.GetFiles(downloadDirectory, "*Account Enquiry*");
-            if (accountEnquiryFiles.Length > 0)
+    static async Task<string> LoginAsync(string username, string password)
+    {
+        try
+        {
+            using (HttpClient client = new HttpClient())
             {
-                var sortedFiles = accountEnquiryFiles.OrderBy(f => File.GetLastWriteTime(f)).ToArray();
-                string destinationPath = @"D:\history\" + Path.GetFileName(sortedFiles[0]);
-                File.Move(accountEnquiryFiles[0], destinationPath);
-                File.Delete(accountEnquiryFiles[0]);
-                Console.WriteLine("Tải xuống hoàn tất và tệp đã được di chuyển.");
+                string loginEndpoint = "https://ebank.tpb.vn/gateway/api/auth/login";
+
+                var loginData = new
+                {
+                    username = username,
+                    password = password,
+                    step_2FA = "VERIFY"
+                };
+
+                string jsonLoginData = Newtonsoft.Json.JsonConvert.SerializeObject(loginData);
+
+                StringContent content = new StringContent(jsonLoginData, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await client.PostAsync(loginEndpoint, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseData = await response.Content.ReadAsStringAsync();
+
+                    // Extract the access token from the response
+                    var tokenResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<TokenResponse>(responseData);
+                    var accessToken = tokenResponse?.access_token;
+
+                    return accessToken;
+                }
+                else
+                {
+                    Console.WriteLine("Login failed. Status Code: " + response.StatusCode);
+                }
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Đã xảy ra lỗi: {ex.Message}");
+            Console.WriteLine("An error occurred during login: " + ex.Message);
         }
-        finally
-        {
-            driver.Quit();
-        }
-
+        return null;
     }
+
+    static async Task<string> GetDataAsync(string accessToken)
+    {
+        try
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                string dataEndpoint = "https://ebank.tpb.vn/gateway/api/smart-search-presentation-service/v2/account-transactions/find";
+
+                var dataAccept = new
+                {
+                    accountNo = "84802082002",
+                    currency = "VND",
+                    fromDate = "20231106",
+                    keyword = "",
+                    maxAcentrysrno = "",
+                    pageNumber = 1,
+                    pageSize = 400,
+                    toDate = "20240206"
+                };
+
+                // Set authorization header
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
+
+                // Serialize request data to JSON
+                string jsonData = Newtonsoft.Json.JsonConvert.SerializeObject(dataAccept);
+
+                // Create StringContent with JSON data
+                StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+                // Send a POST request to the data endpoint
+                HttpResponseMessage response = await client.PostAsync(dataEndpoint, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseData = await response.Content.ReadAsStringAsync();
+                    return responseData;
+                }
+                else
+                {
+                    Console.WriteLine("Data retrieval failed. Status Code: " + response.StatusCode);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("An error occurred during data retrieval: " + ex.Message);
+        }
+        return null;
+    }
+}
+
+// Define a class to represent the token response structure
+public class TokenResponse
+{
+    public string access_token { get; set; }
+    // Add other properties if needed
 }
 

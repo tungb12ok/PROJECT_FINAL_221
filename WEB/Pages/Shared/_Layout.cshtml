@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿
+@{
+    var currentUser = SessionExtensions.Get<User>(Context.Session,"User");
+}
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -27,21 +33,21 @@
                         </li>
                     </ul>
                     <ul class="nav-item ms-auto">
-                        @if (User == null)
+                        @if (currentUser == null)
                         {
-                            <a class="dropdown-item" asp-area="" asp-page="/Login">Login</a>
+                            <a class="dropdown-item" asp-area="" asp-page="/SignIn">Login</a>
                         }
                     </ul>
                     <ul class="nav-item dropdown ms-auto">
-                        @if (User != null)
+                        @if (currentUser != null)
                         {
                             <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="đường_dẫn_đến_avatar" alt="Avatar" style="width: 30px; height: 30px; border-radius: 50%;"> Account
+                                <img src="đường_dẫn_đến_avatar" alt="Helllo, @currentUser.Username" style="width: 30px; height: 30px; border-radius: 50%;" />
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" asp-area="" asp-page="/Profile">View Profile</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-area="" asp-page="/Logout">Logout</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-page="/SignOut">Logout</a></li>
                             </ul>
                         }
                     </ul>
@@ -65,6 +71,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

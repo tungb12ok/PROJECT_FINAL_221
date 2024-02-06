@@ -4,42 +4,107 @@
 }
 <h2>User Profile</h2>
 <!-- Thông tin cá nhân -->
-<form action="submit-profile-info" method="POST">
-    <div class="mb-3">
-        <label for="username" class="form-label">Username</label>
-        <input type="text" class="form-control" id="username" name="username" placeholder="Your Username" readonly>
+<div class="row">
+    <div class="col-md-6">
+        <form action="submit-profile-info" method="POST">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input asp-for="@Model.User.Username" class="form-control" id="username" name="username" placeholder="Your Username" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input asp-for="@Model.User.Email" class="form-control" id="email" name="email" placeholder="Your Email" readonly>
+            </div>
+        </form>
     </div>
-    <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input type="email" class="form-control" id="email" name="email" placeholder="Your Email" readonly>
+    <div class="col-md-6">
+        <!-- Hiển thị số dư -->
+        <div class="mb-3">
+            <label for="balance" class="form-label">Balance</label>
+            <input asp-for="User.Wallet.Balance" class="form-control" id="balance" name="balance" placeholder="Your Balance" readonly>
+        </div>
     </div>
-</form>
+</div>
 
 <!-- Đổi mật khẩu -->
 <h2>Change Password</h2>
-<form action="submit-new-password" method="POST">
+<form method="POST">
     <div class="mb-3">
         <label for="currentPassword" class="form-label">Current Password</label>
-        <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
+        <input asp-for="@Model.curPass" class="form-control" id="currentPassword" name="currentPassword" required>
     </div>
     <div class="mb-3">
         <label for="newPassword" class="form-label">New Password</label>
-        <input type="password" class="form-control" id="newPassword" name="newPassword" required>
+        <input asp-for="@Model.pass" class="form-control" id="newPassword" name="newPassword" required>
     </div>
     <div class="mb-3">
         <label for="confirmNewPassword" class="form-label">Confirm New Password</label>
-        <input type="password" class="form-control" id="confirmNewPassword" name="confirmNewPassword" required>
+        <input asp-for="@Model.rePass" class="form-control" id="confirmNewPassword" name="confirmNewPassword" required>
     </div>
-    <button type="submit" class="btn btn-primary">Change Password</button>
+    <button type="submit" class="btn btn-primary" asp-page-handler="ChangePassword">Change Password</button>
 </form>
 
-<!-- Nạp tiền -->
-<h2>Deposit Funds</h2>
-<form action="submit-deposit" method="POST">
-    <div class="mb-3">
-        <label for="amount" class="form-label">Amount</label>
-        <input type="number" class="form-control" id="amount" name="amount" step="0.01" min="1" required>
+<div class="container mt-5">
+    <h2>Nạp Tiền</h2>
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="Amount">Số Tiền:</label>
+            <input asp-for="Amount" class="form-control">
+        </div>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paymentModal">Nạp Tiền</button>
+    </form>
+</div>
+
+
+<form method="Post">
+    <input asp-for="@Model.Amount" value="" id="amountQR" name="amount" hidden />
+    <input asp-for="@Model.CodeQR" value="" id="codeQR" name="codeQR" hidden />
+    <input asp-for="@Model.userID" value="@Model.User.UserId" hidden />
+    <!-- Payment Modal -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="paymentModalLabel">Payment Information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <img id="qrCode" src="https://img.vietqr.io/image/TPB-0972074620-compact2.png?amount=0&addInfo=DefaultCode&accountName=tungld" alt="Mã QR" style="max-width: 100%; max-height: 100%; width: auto; height: auto;">
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" data-bs-dismiss="modal" asp-page-handler="Paid">Paid</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary">Deposit</button>
 </form>
-    </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#Amount").on("input", function () {
+                updateQRCode();
+            });
+
+            function generateRandomCode(length) {
+                var result = '';
+                var characters = '0123456789';
+                for (var i = 0; i < length; i++) {
+                    result += characters.charAt(Math.floor(Math.random() * characters.length));
+                }
+                result = "CODE" + result;
+                $("#codeQR").val(result);
+                return result;
+            }
+
+            function updateQRCode() {
+                var amount = $("#Amount").val();
+                var amountQR = $("#amountQR"); // Fix: use # to select element by ID
+                amountQR.val(amount); // Fix: use .val(amount) to set the value
+
+                var addInfo = "CODE" + generateRandomCode(6);
+                var qrCodeImage = $("#qrCode");
+                qrCodeImage.attr("src", "https://img.vietqr.io/image/TPB-0972074620-compact2.png?amount=" + amount + "&addInfo=" + addInfo + "&accountName=tungld");
+            }
+        });
+    </script>
+}

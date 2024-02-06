@@ -31,7 +31,9 @@ namespace WEB.Pages
 
                 if (u != null)
                 {
-                    return RedirectToPage("/SuccessPage"); // Redirect to a success page
+                    var session = HttpContext.Session;
+                    Extenstions.SessionExtensions.Set<User>(session, "User", u);
+                    return RedirectToPage("/Index"); // Redirect to a success page
                 }
                 else
                 {
