@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Configuration;
 
 namespace DataAccess.Models
 {
@@ -35,10 +34,8 @@ namespace DataAccess.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-                string ConnectionStr = config.GetConnectionString("DB");
-
-                optionsBuilder.UseSqlServer(ConnectionStr);
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("server =localhost; database = QuickMarket;uid=sa;pwd=sa;TrustServerCertificate=true");
             }
         }
 
@@ -84,9 +81,7 @@ namespace DataAccess.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.TransactionDate)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.TransactionDate).HasColumnType("datetime");
 
                 entity.Property(e => e.TransactionType)
                     .HasMaxLength(50)
@@ -161,6 +156,11 @@ namespace DataAccess.Models
                     .HasForeignKey(d => d.StatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Products_Status");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Products_Users");
             });
 
             modelBuilder.Entity<ProductCategory>(entity =>
