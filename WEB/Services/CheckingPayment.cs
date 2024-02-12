@@ -1,35 +1,81 @@
-﻿using System;
+﻿using DataAccess.Models;
+using Newtonsoft.Json;
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Transactions;
+using WEB.Extenstions;
+using BussinessLogic;
+using BussinessLogic.Repository;
 namespace WEB.Services
 {
     public class CheckingPayment
     {
-        string username = "0972074620";
-        string password = "Tungld123@123";
-        private static string AccessToken { get; set; }
-        private static DateTime AccessTokenExpiration { get; set; }
-
-        public async Task<string> ExeServiceAsync()
+        static string username = "0972074620";
+        static string password = "Tungld123@123";
+        private static string AccessToken { get; set; } = string.Empty;
+        public static async void SystemCheckingBanking()
         {
-            
-            // Kiểm tra xem đã có AccessToken và chưa hết hạn chưa
-            if (string.IsNullOrEmpty(AccessToken) || AccessTokenExpiration <= DateTime.UtcNow)
+            QuickMarketContext context = new QuickMarketContext();
+            WalletRepository wp = new WalletRepository();
+            FinancialTransactionRepository f = new FinancialTransactionRepository();
+
+            List<FinancialTransaction> ftList = context.FinancialTransactions
+                                                        .Where(x => x.Status == "Pending")
+                                                        .ToList();
+            foreach (FinancialTransaction ft in ftList)
             {
-                while (true)
+                if (await CheckingPayment.CheckingBanking(ft))
                 {
-                    // Nếu chưa có hoặc đã hết hạn, thực hiện đăng nhập
-                    AccessToken = await LoginAsync(username, password);
+                    wp.topUpMoney(ft.UserId, ft.Amount);
+                    f.updateFinancialTransactions(ft);
                 }
             }
-
-            // Sau đó, sử dụng AccessToken để thực hiện các yêu cầu khác
-            return await GetDataAsync(AccessToken);
         }
+        public static async Task<bool> CheckingBanking(FinancialTransaction ft)
+        {
+            var jsonData = await CheckingPayment.ExeServiceAsync();
+            Banking jsonDataObj = JsonConvert.DeserializeObject<Banking>(jsonData);
 
-        async Task<string> LoginAsync(string username, string password)
+            if (jsonDataObj != null)
+            {
+                foreach (TransactionInfo info in jsonDataObj.transactionInfos)
+                {
+                    if (info.description.Contains(ft.Description) && ft.Amount == info.amount)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        static public async Task<string> ExeServiceAsync()
+        {
+            int count = 5;
+
+            while (true)
+            {
+                var json = string.Empty;
+                if (count == 0)
+                {
+                    return "";
+                }
+                if (AccessToken != null)
+                {
+                    json = await GetDataAsync(AccessToken);
+                }
+                if(json == null || String.IsNullOrEmpty(json)){
+                    AccessToken = await LoginAsync(username, password);
+                    count--;
+                }
+                else
+                {
+                    return json;
+                }
+            }
+        }
+        static async Task<string> LoginAsync(string username, string password)
         {
             try
             {
@@ -72,7 +118,7 @@ namespace WEB.Services
             return null;
         }
 
-        async Task<string> GetDataAsync(string accessToken)
+        static async Task<string> GetDataAsync(string accessToken)
         {
             try
             {
@@ -121,5 +167,19 @@ namespace WEB.Services
             }
             return null;
         }
+        static public async Task<bool> checkAuthentication(string accessToken)
+        {
+            try
+            {
+                await GetDataAsync(accessToken);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
     }
+
 }

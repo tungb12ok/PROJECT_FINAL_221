@@ -92,6 +92,7 @@ namespace DataAccess.Models
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.FinancialTransactions)
                     .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Financial__UserI__6EF57B66");
             });
 
