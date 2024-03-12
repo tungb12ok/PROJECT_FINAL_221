@@ -19,6 +19,5 @@ namespace DataAccess.Models
         {
             return $"TransactionId: {TransactionId}, UserId: {UserId}, TransactionType: {TransactionType}, Amount: {Amount}, TransactionDate: {TransactionDate}, Status: {Status}, Description: {Description ?? "N/A"}";
         }
-
     }
 }
