@@ -9,7 +9,22 @@ namespace BussinessLogic.Repository
 {
     public class TransactionRepository : ITransactionRepository
     {
+        public bool addFunds(Wallet wallet)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool addTransaction(Transaction t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool minusFunds(Wallet wallet)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool updateFunds(Wallet wallet)
         {
             throw new NotImplementedException();
         }
