@@ -1,5 +1,4 @@
-﻿using DataAccess.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +10,7 @@ namespace DataAccess.ViewModel
     {
         public static string GetFormatVND(decimal amount)
         {
-            string formattedAmount = amount.ToString("N2"); 
+            string formattedAmount = amount.ToString("N2");
             return formattedAmount;
         }
     }
