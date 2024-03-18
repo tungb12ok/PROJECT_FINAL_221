@@ -9,21 +9,9 @@ namespace BussinessLogic.Repository
 {
     public class FinancialTransactionRepository : IFinancialTransactions
     {
-        public bool failedFinancialTransactions(FinancialTransaction financial)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool pendingFinancialTransactions(FinancialTransaction financial)
-        {
-            throw new NotImplementedException();
-        }
-
+        public bool failedFinancialTransactions(FinancialTransaction financial) => FinancialTransactionsDAO.Instance.failedFinancialTransactions(financial);
+        public bool pendingFinancialTransactions(FinancialTransaction financial) => FinancialTransactionsDAO.Instance.pendingFinancialTransactions(financial);
         public bool toUpFinancialTransactions(FinancialTransaction financial) => FinancialTransactionsDAO.Instance.toUpFinancialTransactions(financial);
-
-        public bool updateFinancialTransactions(FinancialTransaction financial)
-        {
-            throw new NotImplementedException();
-        }
+        public bool updateFinancialTransactions(FinancialTransaction financial) => FinancialTransactionsDAO.Instance.updateFinancialTransactions(financial);
     }
 }

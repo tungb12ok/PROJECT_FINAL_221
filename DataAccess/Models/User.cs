@@ -13,6 +13,7 @@ namespace DataAccess.Models
             MessageFromUsers = new HashSet<Message>();
             MessageToUsers = new HashSet<Message>();
             ProductReviews = new HashSet<ProductReview>();
+            Products = new HashSet<Product>();
             TransactionBuyers = new HashSet<Transaction>();
             TransactionSellers = new HashSet<Transaction>();
         }
@@ -39,6 +40,7 @@ namespace DataAccess.Models
         public virtual ICollection<Message> MessageFromUsers { get; set; }
         public virtual ICollection<Message> MessageToUsers { get; set; }
         public virtual ICollection<ProductReview> ProductReviews { get; set; }
+        public virtual ICollection<Product> Products { get; set; }
         public virtual ICollection<Transaction> TransactionBuyers { get; set; }
         public virtual ICollection<Transaction> TransactionSellers { get; set; }
     }

@@ -1,11 +1,8 @@
 ﻿using BussinessLogic.Repository;
 using DataAccess.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DataAccess.Models;
+using DataAccess.Enum;
+
+
 namespace BussinessLogic
 {
     public class FinancialTransactionsDAO : IFinancialTransactions
@@ -39,7 +36,28 @@ namespace BussinessLogic
 
         public bool updateFinancialTransactions(FinancialTransaction financial)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (financial == null)
+                {
+                    Console.WriteLine("Error: Financial transaction is null.");
+                    return false;
+                }
+
+                var existingFinancialTransaction = context.FinancialTransactions.FirstOrDefault(x => x.TransactionId == financial.TransactionId);
+
+                if (existingFinancialTransaction != null)
+                {
+                    existingFinancialTransaction.Status = TransactionStatus.Successful.ToString();
+                }
+                context.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return false;
+            }
         }
 
         public bool failedFinancialTransactions(FinancialTransaction financial)
