@@ -33,17 +33,25 @@ namespace WEB.Pages.Admin
         public IList<FinancialTransaction> FinancialTransaction { get; set; } = default!;
         public int TotalPages { get; set; }
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(string SelectedStatus)
         {
             StatusList = Enum.GetValues<TransactionStatus>()
                            .Select(s => s.ToString())
                            .ToList();
 
-            FilteredTransactions = await _context.FinancialTransactions
+            if (SelectedStatus != null)
+            {
+                FilteredTransactions = await _context.FinancialTransactions
+            .Include(f => f.User)
+            .Where(f => f.Status == SelectedStatus)
+            .ToListAsync();
+            }
+            else
+            {
+                FilteredTransactions = await _context.FinancialTransactions
                 .Include(f => f.User)
                 .ToListAsync();
-
-            
+            }
             // Implement pagination
             const int pageSize = 10;
             TotalPages = (int)Math.Ceiling(FilteredTransactions.Count / (double)pageSize);
