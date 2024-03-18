@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Configuration;
 
 namespace DataAccess.Models
 {
@@ -34,8 +35,10 @@ namespace DataAccess.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("server =localhost; database = QuickMarket;uid=sa;pwd=sa;TrustServerCertificate=true");
+                var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+                string ConnectionStr = config.GetConnectionString("DB");
+
+                optionsBuilder.UseSqlServer(ConnectionStr);
             }
         }
 
@@ -282,6 +285,12 @@ namespace DataAccess.Models
                     .WithMany(p => p.TransactionSellers)
                     .HasForeignKey(d => d.SellerId)
                     .HasConstraintName("FK__Transacti__Selle__4BAC3F29");
+
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.Transactions)
+                    .HasForeignKey(d => d.StatusId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Transactions_Status");
             });
 
             modelBuilder.Entity<User>(entity =>
@@ -360,6 +369,11 @@ namespace DataAccess.Models
                 entity.Property(e => e.State)
                     .HasMaxLength(100)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.UserShippeds)
+                    .HasForeignKey(d => d.StatusId)
+                    .HasConstraintName("FK_UserShipped_Status");
 
                 entity.HasOne(d => d.Transaction)
                     .WithOne(p => p.UserShipped)

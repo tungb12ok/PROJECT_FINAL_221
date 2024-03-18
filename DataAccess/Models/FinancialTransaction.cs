@@ -14,10 +14,5 @@ namespace DataAccess.Models
         public string? Description { get; set; }
 
         public virtual User User { get; set; } = null!;
-
-        public override string ToString()
-        {
-            return $"TransactionId: {TransactionId}, UserId: {UserId}, TransactionType: {TransactionType}, Amount: {Amount}, TransactionDate: {TransactionDate}, Status: {Status}, Description: {Description ?? "N/A"}";
-        }
     }
 }
