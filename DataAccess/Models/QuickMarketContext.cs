@@ -179,6 +179,11 @@ namespace DataAccess.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Description).HasColumnType("text");
+
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.ProductCategories)
+                    .HasForeignKey(d => d.StatusId)
+                    .HasConstraintName("FK_ProductCategories_Status");
             });
 
             modelBuilder.Entity<ProductImage>(entity =>
