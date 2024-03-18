@@ -9,8 +9,7 @@ namespace BussinessLogic.Repository
 {
     public interface ITransactionRepository
     {
-        public bool addFunds(Wallet wallet);
-        public bool updateFunds(Wallet wallet);
-        public bool minusFunds(Wallet wallet);
+        public bool addTransaction(Transaction t);
+        public bool updateTransaction(Transaction t);
     }
 }
