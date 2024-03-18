@@ -4,21 +4,25 @@
 @{
     ViewData["Title"] = "Index";
 }
+@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
 
 <h1 class="mb-4">Manager Financial Transaction</h1>
 <div class="mb-3">
-    <form id="filterForm" method="get">
+    <form id="filterForm" >
         <input type="text" class="form-control" placeholder="Search" id="searchInput" />
-        <select asp-for="@Model.SelectedStatus">
+        <select  id="statusSelect" asp-for="@Model.SelectedStatus">
             <option value="">-- Select Status --</option>
             @foreach (var status in Model.StatusList)
             {
                 <option value="@status">@status</option>
             }
         </select>
-        <button type="submit" class="btn btn-primary mt-2">Apply Filters</button>
+        <button type="submit" asp-page-handler="Filter" class="btn btn-primary mt-2">Apply Filters</button>
     </form>
 </div>
+
+
+
 <div class="table-responsive">
     <table class="table table-bordered table-hover">
         <thead class="bg-success text-white">
@@ -73,9 +77,9 @@
                         @Html.DisplayFor(modelItem => item.Status)
                     </td>
                     <td>
-                        <a class="btn btn-primary btn-sm" asp-page="./Edit" asp-route-id="@item.TransactionId">Edit</a>
-                        <a class="btn btn-info btn-sm" asp-page="./Details" asp-route-id="@item.TransactionId">Details</a>
-                        <a class="btn btn-danger btn-sm" asp-page="./Delete" asp-route-id="@item.TransactionId">Delete</a>
+                        <a class="btn btn-primary btn-sm" asp-page="/Admin/ManagerFinanciTransaction/Edit" asp-route-id="@item.TransactionId">Edit</a>
+                        <a class="btn btn-info btn-sm" asp-page="/Admin/ManagerFinanciTransaction/Details" asp-route-id="@item.TransactionId">Details</a>
+                        <a class="btn btn-danger btn-sm" asp-page="/Admin/ManagerFinanciTransaction/Delete" asp-route-id="@item.TransactionId">Delete</a>
                     </td>
                 </tr>
             }

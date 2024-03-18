@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
 using DataAccess.Enum;
+using Microsoft.AspNetCore.Authorization;
+
 namespace WEB.Pages.Admin
 {
     public class IndexModel : PageModel
@@ -61,5 +63,33 @@ namespace WEB.Pages.Admin
             ViewData["totalSuccess"] = totalSuccess.ToString();
 
         }
+        public async Task<IActionResult> OnGetFilter(string Text)
+        {
+            FilteredTransactions = await _context.FinancialTransactions
+            .Include(f => f.User)
+            .Where(f => f.Status == Text)
+            .ToListAsync();
+
+            const int pageSize = 10;
+            TotalPages = (int)Math.Ceiling(FilteredTransactions.Count / (double)pageSize);
+            FilteredTransactions = FilteredTransactions
+                .Skip((PageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            // Lấy tổng số tiền thành công và tổng số giao dịch thành công
+            decimal totalAmount = await _context.FinancialTransactions
+                                        .Where(f => f.Status == "Successful")
+                                        .SumAsync(x => x.Amount);
+            int totalSuccess = await _context.FinancialTransactions
+                                          .Where(f => f.Status == "Successful")
+                                          .CountAsync();
+
+            ViewData["total"] = totalAmount.ToString();
+            ViewData["totalSuccess"] = totalSuccess.ToString();
+
+            return Page();
+        }
+
     }
 }
