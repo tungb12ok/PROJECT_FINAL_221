@@ -31,6 +31,11 @@ namespace WEB.Pages
 
                 if (u != null)
                 {
+                    if (u.RoldeId == 1)
+                    {
+                        return RedirectToPage("/Admin/Index");
+                    }
+
                     var session = HttpContext.Session;
                     Extenstions.SessionExtensions.Set<User>(session, "User", u);
                     return RedirectToPage("/Index"); // Redirect to a success page
