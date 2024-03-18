@@ -5,8 +5,7 @@ using WEB.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Identity;
-using DocumentFormat.OpenXml.Spreadsheet;
-using WEB.Extenstions;
+
 namespace WEB.Pages
 {
     public class IndexModel : PageModel
@@ -14,22 +13,15 @@ namespace WEB.Pages
 
         private readonly QuickMarketContext _context;
 
-
-        [BindProperty]
-        public int UserID { get; set; }
-        [BindProperty]
-        public int ProductID { get; set; }
         public IndexModel(QuickMarketContext context)
         {
             _context = context;
         }
         public List<ProductViewModel> ProductsWithImages { get; set; }
 
-        [BindProperty]
-        public User user { get; set; }
+        public User user { get; }
         public void OnGet()
         {
-            user = Extenstions.SessionExtensions.Get<User>(HttpContext.Session, "User");
             //products=_context.Products.ToList();
             // Lấy danh sách sản phẩm với danh sách hình ảnh từ cơ sở dữ liệu
             ProductsWithImages = _context.Products
@@ -48,19 +40,19 @@ namespace WEB.Pages
                 })
                 .ToList();
         }
-        public async Task<IActionResult> OnPostAddToFavouriteAsync()
+        public async Task<IActionResult> OnPostAddToFavouriteAsync(int productId, int userId)
         {
             // Lấy UserId của người dùng hiện tại
             // Kiểm tra xem sản phẩm đã được yêu thích trước đó chưa
-            var existingFavourite = await _context.Favorites.FirstOrDefaultAsync(f => f.ProductId == ProductID);
+            var existingFavourite = await _context.Favorites.FirstOrDefaultAsync(f => f.ProductId == productId);
 
             // Nếu sản phẩm chưa được yêu thích, thêm vào bảng Favorites
             if (existingFavourite == null)
             {
                 var favourite = new Favorite
                 {
-                    UserId = UserID, // Thay YourUserId bằng UserId của người dùng hiện tại
-                    ProductId = ProductID,
+                    UserId = userId, // Thay YourUserId bằng UserId của người dùng hiện tại
+                    ProductId = productId,
                     DateAdded = DateTime.Now
                 };
 

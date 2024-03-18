@@ -67,7 +67,7 @@ namespace WEB.Pages.UserManager
                 }
             }
 
-            return RedirectToPage("/Pages/Index");
+            return RedirectToPage("./Index");
         }
 
         private bool ProductExists(int id)
