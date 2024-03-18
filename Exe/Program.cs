@@ -9,20 +9,7 @@ class Program
     public static string password = "Tungld123@123";
     static async Task Main(string[] args)
     {
-        try
-        {
-            // The rest of your code remains unchanged
-            var accessToken = await LoginAsync(username, password);
-
-            var json = await GetDataAsync(accessToken);
-
-            // Save JSON to a file named "output.json"
-            File.WriteAllText("output.json", json);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("An error occurred: " + ex.Message);
-        }
+       
     }
 
     static async Task<string> LoginAsync(string username, string password)

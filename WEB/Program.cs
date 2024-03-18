@@ -1,13 +1,14 @@
 using DataAccess.Models;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Exe;
+using WEB.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<QuickMarketContext>();
 builder.Services.AddRazorPages();
 
-builder.Services.AddHostedService<TimerService>();
+builder.Services.AddHostedService<CheckingPaymentService>();
 
 // Add session and necessary services
 builder.Services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache

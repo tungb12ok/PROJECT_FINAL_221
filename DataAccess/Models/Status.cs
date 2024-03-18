@@ -8,6 +8,8 @@ namespace DataAccess.Models
         public Status()
         {
             Products = new HashSet<Product>();
+            Transactions = new HashSet<Transaction>();
+            UserShippeds = new HashSet<UserShipped>();
         }
 
         public int StatusId { get; set; }
@@ -15,5 +17,7 @@ namespace DataAccess.Models
         public string? Description { get; set; }
 
         public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<Transaction> Transactions { get; set; }
+        public virtual ICollection<UserShipped> UserShippeds { get; set; }
     }
 }

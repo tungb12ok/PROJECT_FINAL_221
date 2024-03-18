@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using WEB.Extenstions;
 using BussinessLogic.Repository;
-using DocumentFormat.OpenXml.Bibliography;
 using WEB.Services;
 namespace WEB.Pages
 {
@@ -13,17 +12,11 @@ namespace WEB.Pages
         public FinancialTransactionRepository ft = new FinancialTransactionRepository();
         private readonly ILogger<SignInModel> _logger;
         private readonly QuickMarketContext _quickMarketContext;
-        [BindProperty]
-        public string curPass { get; set; }
-        [BindProperty]
-        public string pass { get; set; }
+        
         [BindProperty]
         public string Amount { get; set; } = string.Empty;
         [BindProperty]
-        public string rePass { get; set; }
-        [BindProperty]
         public string CodeQR { get; set; } = string.Empty;
-
         [BindProperty]
         public User User { get; set; }
         [BindProperty]
@@ -44,13 +37,38 @@ namespace WEB.Pages
         }
         public IActionResult OnPostChangePassword()
         {
-            // Xử lý logic cho Action 2
+            string curPass = Request.Form["currentPassword"];
+            string pass = Request.Form["newPassword"];
+            string rePass = Request.Form["confirmNewPassword"];
+
+            User = Extenstions.SessionExtensions.Get<User>(HttpContext.Session, "User");
+            User = _quickMarketContext.Users
+                            .Include(x => x.Wallet)
+                            .Include(x => x.FinancialTransactions)
+                            .FirstOrDefault(x => x.UserId == User.UserId);
+            bool flag = true;
+
+            if (!curPass.Equals(User.PasswordHash))
+            {
+                flag = false;
+                ViewData["CurPass"] = "Password is incorect!";
+            }
+            if (!pass.Equals(rePass))
+            {
+                flag = false;
+                ViewData["RePass"] = "Re-Password must be same new password!";
+            }
+            if(flag)
+            {
+                User.PasswordHash = rePass;
+                _quickMarketContext.SaveChanges();
+                ViewData["Success"] = "Change password successfully!";
+            }
             return Page();
         }
         public IActionResult OnPostPaid()
         {
             CheckingPayment c = new CheckingPayment();
-            // Xử lý logic cho Action 2
             var financialTrans = new FinancialTransaction
             {
                 UserId = User.UserId,
@@ -60,16 +78,7 @@ namespace WEB.Pages
                 Status = TransactionStatus.Pending.ToString(),
                 Description = CodeQR,
             };
-            try
-            {
-                CheckingPaymentService cs = new CheckingPaymentService();
-                cs.checkingPayment();
-                ft.toUpFinancialTransactions(financialTrans);
-            }
-            catch (Exception ex)
-            {
-                return Redirect("/Error");
-            }
+            ft.toUpFinancialTransactions(financialTrans);
             return Redirect("/Profile");
         }
     }
