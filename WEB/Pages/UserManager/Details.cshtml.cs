@@ -27,7 +27,7 @@ namespace WEB.Pages.UserManager
                 return NotFound();
             }
 
-            var product = await _context.Products.FirstOrDefaultAsync(m => m.ProductId == id);
+            var product = await _context.Products.Include(x=>x.Category).Include(x=>x.Status).FirstOrDefaultAsync(m => m.ProductId == id);
             if (product == null)
             {
                 return NotFound();

@@ -25,7 +25,7 @@ namespace WEB.Services
                                                         .Where(x => x.Status == "Pending")
                                                         .ToList();
             foreach (FinancialTransaction ft in ftList)
-            {
+        {
                 if (await CheckingPayment.CheckingBanking(ft))
                 {
                     wp.topUpMoney(ft.UserId, ft.Amount);
@@ -37,7 +37,7 @@ namespace WEB.Services
         {
             var jsonData = await CheckingPayment.ExeServiceAsync();
             Banking jsonDataObj = JsonConvert.DeserializeObject<Banking>(jsonData);
-
+            
             if (jsonDataObj != null)
             {
                 foreach (TransactionInfo info in jsonDataObj.transactionInfos)
@@ -51,11 +51,11 @@ namespace WEB.Services
             return false;
         }
         static public async Task<string> ExeServiceAsync()
-        {
+            {
             int count = 5;
 
-            while (true)
-            {
+                while (true)
+                {
                 var json = string.Empty;
                 if (count == 0)
                 {
@@ -74,6 +74,9 @@ namespace WEB.Services
                     return json;
                 }
             }
+
+            // Sau đó, sử dụng AccessToken để thực hiện các yêu cầu khác
+            return await GetDataAsync(AccessToken);
         }
         static async Task<string> LoginAsync(string username, string password)
         {
