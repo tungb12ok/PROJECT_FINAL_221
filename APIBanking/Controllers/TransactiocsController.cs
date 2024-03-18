@@ -87,7 +87,8 @@ namespace APIBanking.Controllers
                 using (HttpClient client = new HttpClient())
                 {
                     string dataEndpoint = "https://ebank.tpb.vn/gateway/api/smart-search-presentation-service/v2/account-transactions/find";
-
+                    // Get the current date and format it as "yyyyMMdd"
+                    string currentDate = DateTime.Now.ToString("yyyyMMdd");
                     var dataAccept = new
                     {
                         accountNo = "84802082002",
@@ -97,7 +98,7 @@ namespace APIBanking.Controllers
                         maxAcentrysrno = "",
                         pageNumber = 1,
                         pageSize = 400,
-                        toDate = "20240206"
+                        toDate = currentDate
                     };
 
                     // Set authorization header
