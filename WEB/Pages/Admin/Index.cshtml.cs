@@ -35,7 +35,7 @@ namespace WEB.Pages.Admin
 
         public async Task OnGetAsync()
         {
-            StatusList = Enum.GetValues<TransactionStatus>()
+           StatusList = Enum.GetValues<TransactionStatus>()
                            .Select(s => s.ToString())
                            .ToList();
 
@@ -63,11 +63,11 @@ namespace WEB.Pages.Admin
             ViewData["totalSuccess"] = totalSuccess.ToString();
 
         }
-        public async Task<IActionResult> OnGetFilter(string Text)
+        public async Task OnGetFilterAsync()
         {
             FilteredTransactions = await _context.FinancialTransactions
             .Include(f => f.User)
-            .Where(f => f.Status == Text)
+            .Where(f => f.Status == SelectedStatus)
             .ToListAsync();
 
             const int pageSize = 10;
@@ -88,7 +88,6 @@ namespace WEB.Pages.Admin
             ViewData["total"] = totalAmount.ToString();
             ViewData["totalSuccess"] = totalSuccess.ToString();
 
-            return Page();
         }
 
     }
