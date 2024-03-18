@@ -65,20 +65,20 @@
 <body>
     <h1>Product List</h1>
     <div class="container">
-        @*@foreach (var product in Model.products)
+        @foreach (var product in Model.products)
         {
-        <div class="product">
-        <img src="https://hoanghamobile.com/tin-tuc/wp-content/webp-express/webp-images/uploads/2023/08/hinh-nen-toi-12.jpg.webp" alt="@product.Name">
-        <h2>@product.Name</h2>
-        <p>@product.Description</p>
-        <span class="price">$@product.Price</span>
-        <div class="buttons">
-        <button class="buy-button">Buy Now</button>
-        <button class="cart-button">Add to Cart</button>
-        </div>
-        </div>
-        }*@
-        @* @foreach (var product in Model.ProductsWithImages)
+            <div class="product">
+                <img src="https://hoanghamobile.com/tin-tuc/wp-content/webp-express/webp-images/uploads/2023/08/hinh-nen-toi-12.jpg.webp" alt="@product.Name">
+                <h2>@product.Name</h2>
+                <p>@product.Description</p>
+                <span class="price">$@product.Price</span>
+                <div class="buttons">
+                    <button class="buy-button">Buy Now</button>
+                    <button class="cart-button">Add to Cart</button>
+                </div>
+            </div>
+        }
+        @foreach (var product in Model.ProductsWithImages)
         {
             <div class="product">
                 <div id="carousel-@product.ProductId" class="carousel slide" data-ride="carousel">
@@ -106,8 +106,8 @@
                 <div class="buttons">
                     <button class="buy-button">Buy Now</button>
                     <form asp-page-handler="AddToFavourite"
-                      asp-route-productId="@product.ProductId">
-                      
+                          asp-route-productId="@product.ProductId">
+
                         <button type="submit" class="favourite-button">Add to Your Favourite</button>
                     </form>
                 </div>
@@ -115,7 +115,7 @@
         }
         <!-- Add more product entries as needed -->
 
-    </div> *@
+    </div>
 
 </body>
 </html>
