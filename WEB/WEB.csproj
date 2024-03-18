@@ -15,6 +15,7 @@
   <ItemGroup>
     <Folder Include="Pages\Manager\ManagerTransaction\" />
     <Folder Include="Pages\Manager\ManagerAccount\" />
+    <Folder Include="Pages\Manager\ManagerProduct\" />
     <Folder Include="Pages\UserManager\MyTransaction\" />
   </ItemGroup>
 
