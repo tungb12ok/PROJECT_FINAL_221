@@ -300,6 +300,12 @@ namespace DataAccess.Models
 
             modelBuilder.Entity<User>(entity =>
             {
+                entity.HasIndex(e => e.Email, "UC_Email")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.Username, "UC_Username")
+                    .IsUnique();
+
                 entity.HasIndex(e => e.Email, "UQ__Users__A9D1053483FFE6BF")
                     .IsUnique();
 
@@ -330,6 +336,11 @@ namespace DataAccess.Models
                     .HasForeignKey(d => d.RoldeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Users_Role");
+
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.Users)
+                    .HasForeignKey(d => d.StatusId)
+                    .HasConstraintName("FK_Users_Status");
             });
 
             modelBuilder.Entity<UserShipped>(entity =>

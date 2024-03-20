@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Pages\UserManager\MyTransaction\**" />
+    <Content Remove="Pages\UserManager\MyTransaction\**" />
+    <EmbeddedResource Remove="Pages\UserManager\MyTransaction\**" />
+    <None Remove="Pages\UserManager\MyTransaction\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\BussinessLogic\BussinessLogic.csproj" />
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
     <ProjectReference Include="..\Exe\Exe.csproj" />
@@ -16,7 +23,6 @@
     <Folder Include="Pages\Manager\ManagerTransaction\" />
     <Folder Include="Pages\Manager\ManagerAccount\" />
     <Folder Include="Pages\Manager\ManagerProduct\" />
-    <Folder Include="Pages\UserManager\MyTransaction\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +33,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
+    <PackageReference Include="System.Net.Mail.Abstractions" Version="1.1.21" />
   </ItemGroup>
 
 </Project>

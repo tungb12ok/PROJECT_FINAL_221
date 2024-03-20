@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
 
-namespace WEB.Pages.UserManager
+namespace WEB.Pages.UserManager.ManagerProduct
 {
     public class DeleteModel : PageModel
     {

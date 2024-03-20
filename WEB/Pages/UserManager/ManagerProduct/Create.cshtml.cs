@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using DataAccess.Models;
 
-namespace WEB.Pages.UserManager
+namespace WEB.Pages.UserManager.ManagerProduct
 {
     public class CreateModel : PageModel
     {

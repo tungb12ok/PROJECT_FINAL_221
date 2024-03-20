@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
 
-namespace WEB.Pages.UserManager
+namespace WEB.Pages.UserManager.ManagerProduct
 {
     public class EditModel : PageModel
     {

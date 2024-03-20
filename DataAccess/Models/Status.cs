@@ -11,6 +11,7 @@ namespace DataAccess.Models
             Products = new HashSet<Product>();
             Transactions = new HashSet<Transaction>();
             UserShippeds = new HashSet<UserShipped>();
+            Users = new HashSet<User>();
         }
 
         public int StatusId { get; set; }
@@ -21,5 +22,6 @@ namespace DataAccess.Models
         public virtual ICollection<Product> Products { get; set; }
         public virtual ICollection<Transaction> Transactions { get; set; }
         public virtual ICollection<UserShipped> UserShippeds { get; set; }
+        public virtual ICollection<User> Users { get; set; }
     }
 }
