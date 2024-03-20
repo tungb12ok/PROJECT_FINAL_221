@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using DataAccess.Models;
 
-namespace WEB.Pages.Manager.Categories
+namespace WEB.Pages.Admin.ManagerStatus
 {
     public class CreateModel : PageModel
     {
@@ -20,24 +20,22 @@ namespace WEB.Pages.Manager.Categories
 
         public IActionResult OnGet()
         {
-        ViewData["StatusId"] = new SelectList(_context.Statuses, "StatusId", "StatusName");
             return Page();
         }
 
         [BindProperty]
-        public ProductCategory ProductCategory { get; set; } = default!;
+        public Status Status { get; set; } = default!;
         
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
-
         {
-          if (!ModelState.IsValid || _context.ProductCategories == null || ProductCategory == null)
+          if (!ModelState.IsValid || _context.Statuses == null || Status == null)
             {
                 return Page();
             }
 
-            _context.ProductCategories.Add(ProductCategory);
+            _context.Statuses.Add(Status);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
