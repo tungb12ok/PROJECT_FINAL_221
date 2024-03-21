@@ -1,33 +1,41 @@
-﻿using Newtonsoft.Json;
+﻿using DataAccess.Models;
+using Exe;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
 namespace WEB.Services
 {
-    public class CheckingPaymentService
+    public class CheckingPaymentService : IHostedService, IDisposable
     {
-        public async Task<bool> checkingPayment()
+        private readonly ILogger<TimerService> _logger;
+        private Timer _timer;
+
+        public CheckingPaymentService(ILogger<TimerService> logger)
         {
-            CheckingPayment p = new CheckingPayment();
-            var jsonData = "";
-            jsonData = await p.ExeServiceAsync();
-            var jsonDataObj = JsonConvert.DeserializeObject<TransactionInfo>(jsonData);
+            _logger = logger;
+        }
 
-            // Tìm kiếm theo các điều kiện
-            //var result = jsonDataObj.Find(item =>
-            //    item.id == userID &&
-            //    item.description.Contains(description) &&
-            //    item.arrangementId.Contains(transactionID));
+        public void Dispose()
+        {
+            _timer?.Dispose();
+        }
 
-            // Kiểm tra xem có dữ liệu nào khớp không
-            //if (result != null)
-            //{
-            //    // Trả về kết quả dưới dạng JSON hoặc thông tin cần thiết
-            //    return JsonConvert.SerializeObject(result);
-            //}
-            //else
-            //{
-            //    // Trả về một giá trị mặc định hoặc null nếu không tìm thấy
-            //    return "Không tìm thấy dữ liệu phù hợp.";
-            //}
-            return false;
+        public Task StartAsync(CancellationToken cancellationToken)
+        {
+            _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(100));
+
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+        private void DoWork(object state)
+        {
+            _logger.LogInformation("Checking..."); // Thêm thông tin log theo nhu cầu
+            CheckingPayment.SystemCheckingBanking();
         }
     }
 }

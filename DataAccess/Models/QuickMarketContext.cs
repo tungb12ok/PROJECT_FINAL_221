@@ -84,9 +84,7 @@ namespace DataAccess.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.TransactionDate)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.TransactionDate).HasColumnType("datetime");
 
                 entity.Property(e => e.TransactionType)
                     .HasMaxLength(50)
@@ -97,6 +95,7 @@ namespace DataAccess.Models
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.FinancialTransactions)
                     .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Financial__UserI__6EF57B66");
             });
 
@@ -161,6 +160,11 @@ namespace DataAccess.Models
                     .HasForeignKey(d => d.StatusId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Products_Status");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Products_Users");
             });
 
             modelBuilder.Entity<ProductCategory>(entity =>
@@ -175,6 +179,11 @@ namespace DataAccess.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Description).HasColumnType("text");
+
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.ProductCategories)
+                    .HasForeignKey(d => d.StatusId)
+                    .HasConstraintName("FK_ProductCategories_Status");
             });
 
             modelBuilder.Entity<ProductImage>(entity =>
@@ -281,10 +290,22 @@ namespace DataAccess.Models
                     .WithMany(p => p.TransactionSellers)
                     .HasForeignKey(d => d.SellerId)
                     .HasConstraintName("FK__Transacti__Selle__4BAC3F29");
+
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.Transactions)
+                    .HasForeignKey(d => d.StatusId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Transactions_Status");
             });
 
             modelBuilder.Entity<User>(entity =>
             {
+                entity.HasIndex(e => e.Email, "UC_Email")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.Username, "UC_Username")
+                    .IsUnique();
+
                 entity.HasIndex(e => e.Email, "UQ__Users__A9D1053483FFE6BF")
                     .IsUnique();
 
@@ -315,6 +336,11 @@ namespace DataAccess.Models
                     .HasForeignKey(d => d.RoldeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Users_Role");
+
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.Users)
+                    .HasForeignKey(d => d.StatusId)
+                    .HasConstraintName("FK_Users_Status");
             });
 
             modelBuilder.Entity<UserShipped>(entity =>
@@ -359,6 +385,11 @@ namespace DataAccess.Models
                 entity.Property(e => e.State)
                     .HasMaxLength(100)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.Status)
+                    .WithMany(p => p.UserShippeds)
+                    .HasForeignKey(d => d.StatusId)
+                    .HasConstraintName("FK_UserShipped_Status");
 
                 entity.HasOne(d => d.Transaction)
                     .WithOne(p => p.UserShipped)

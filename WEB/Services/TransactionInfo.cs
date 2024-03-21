@@ -9,7 +9,7 @@
         public string category { get; set; }
         public string bookingDate { get; set; }
         public string valueDate { get; set; }
-        public string amount { get; set; }
+        public decimal amount { get; set; }
         public string currency { get; set; }
         public string creditDebitIndicator { get; set; }
         public string runningBalance { get; set; }

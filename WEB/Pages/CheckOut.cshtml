@@ -1,0 +1,99 @@
+﻿@page
+@model WEB.Pages.CheckOutModel
+@{
+}
+<style>
+    body {
+        padding-top: 20px;
+        background-color: #f8f9fa;
+    }
+
+    .info-card {
+        border: 1px solid #ddd;
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+        .info-card h3 {
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .info-card .card-text {
+            margin-bottom: 5px;
+        }
+
+    .form-row {
+        align-items: flex-end;
+    }
+
+    .form-check-inline {
+        margin-right: 20px;
+    }
+    /* CSS */
+    .address-bg-1 {
+        background-color: #f8f9fa;
+    }
+
+    .address-bg-2 {
+        background-color: #e9ecef;
+    }
+
+    /* Add more classes for additional background colors if needed */
+
+</style>
+<div class="container">
+    <!-- Shipped Info -->
+    <div class="form-row">
+        <div class="col-md-12">
+            <h3>Choose a Shipped Address</h3>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="shippedAddress" id="address1" value="address1">
+                        <label class="form-check-label" for="address1">123 Main St., City Name, State Name, Country Name, Postal Code</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="shippedAddress" id="address2" value="address2">
+                        <label class="form-check-label" for="address2">456 Elm St., City Name, State Name, Country Name, Postal Code</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <!-- Customer Info -->
+        <div class="col-md-6">
+            <div class="info-card">
+                <h3>Customer Information</h3>
+                <p class="card-text"><strong>Customer Name:</strong> <input type="text" class="form-control" placeholder="Enter customer name"></p>
+                <p class="card-text"><strong>Address Line 1:</strong> <input type="text" class="form-control" placeholder="Enter address line 1"></p>
+                <p class="card-text"><strong>Address Line 2:</strong> <input type="text" class="form-control" placeholder="Enter address line 2"></p>
+                <p class="card-text"><strong>City:</strong> <input type="text" class="form-control" placeholder="Enter city"></p>
+                <p class="card-text"><strong>State:</strong> <input type="text" class="form-control" placeholder="Enter state"></p>
+                <p class="card-text"><strong>Country:</strong> <input type="text" class="form-control" placeholder="Enter country"></p>
+                <p class="card-text"><strong>Postal Code:</strong> <input type="text" class="form-control" placeholder="Enter postal code"></p>
+            </div>
+        </div>
+
+        <!-- Product Info -->
+        <div class="col-md-6">
+            <div class="info-card">
+                <h3>Product Information</h3>
+                <p class="card-text"><strong>Product Name:</strong> <input type="text" class="form-control" placeholder="Enter product name"></p>
+                <p class="card-text"><strong>Description:</strong> <input type="text" class="form-control" placeholder="Enter description"></p>
+                <p class="card-text"><strong>Price:</strong> <input type="text" class="form-control" placeholder="Enter price"></p>
+                <p class="card-text"><strong>Stock Quantity:</strong> <input type="text" class="form-control" placeholder="Enter stock quantity"></p>
+                <p class="card-text"><strong>Date Added:</strong> <input type="text" class="form-control" placeholder="Enter date added"></p>
+            </div>
+        </div>
+    </div>
+</div>

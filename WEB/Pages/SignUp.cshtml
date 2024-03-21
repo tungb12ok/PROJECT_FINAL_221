@@ -19,5 +19,11 @@
         <input type="password" class="form-control" asp-for="User.PasswordHash">
         <span asp-validation-for="User.PasswordHash" class="text-danger"></span>
     </div>
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert-danger">
+            @ViewBag.Message
+        </div>
+    }
     <button type="submit" class="btn btn-primary">Register</button>
 </form>

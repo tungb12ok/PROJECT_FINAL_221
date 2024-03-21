@@ -14,7 +14,9 @@ namespace DataAccess.Models
         public string PostalCode { get; set; } = null!;
         public string AddressType { get; set; } = null!;
         public DateTime DateAdded { get; set; }
+        public int? StatusId { get; set; }
 
+        public virtual Status? Status { get; set; }
         public virtual Transaction Transaction { get; set; } = null!;
     }
 }

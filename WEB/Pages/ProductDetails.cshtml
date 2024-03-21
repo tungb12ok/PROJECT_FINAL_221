@@ -1,0 +1,106 @@
+﻿@page
+@model WEB.Pages.ProductDetailsModel
+@{
+}
+<div class="container mt-5">
+    <div class="row">
+        <!-- Left Column - Product Images -->
+        <div class="col-md-6">
+            <div class="mb-3">
+                <img src="image1.jpg" class="img-fluid mb-2" alt="Product Image">
+                <!-- Additional Product Images -->
+                <div class="row">
+                    <div class="col-4">
+                        <img src="image2.jpg" class="img-fluid" alt="Product Image">
+                    </div>
+                    <div class="col-4">
+                        <img src="image3.jpg" class="img-fluid" alt="Product Image">
+                    </div>
+                    <div class="col-4">
+                        <img src="image4.jpg" class="img-fluid" alt="Product Image">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column - Product Description -->
+        <div class="col-md-6">
+            <h2 class="mb-4">Product Name</h2>
+            <p class="text-muted mb-4">Seller: Seller Name</p>
+            <p>Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nec justo vel velit condimentum vehicula.</p>
+            <button class="btn btn-primary">Chat</button>
+        </div>
+    </div>
+</div>
+<div class="container mt-5">
+    <h1 class="mb-4">Comments</h1>
+
+    <!-- Form for adding new comment -->
+    <form id="commentForm">
+
+        <div class="mb-3">
+            <label for="commentInput" class="form-label">Comment</label>
+            <textarea class="form-control" id="commentInput" rows="3" placeholder="Your Comment"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <hr>
+
+    <!-- Display existing comments -->
+    <div id="comments">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">User 1</h5>
+                <p class="card-text">This is a great comment!</p>
+                <a href="#" class="card-link reply-link">Reply</a>
+                <div class="reply-form" style="display: none;">
+                    <form class="reply-comment-form">
+                        <div class="mb-3">
+                            <label for="replyCommentInput" class="form-label">Comment</label>
+                            <textarea class="form-control" id="replyCommentInput" rows="1" placeholder="Your Reply"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Reply</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">User 1</h5>
+                <p class="card-text">This is a great comment!</p>
+                <a href="#" class="card-link reply-link">Reply</a>
+                <div class="reply-form" style="display: none;">
+                    <form class="reply-comment-form">
+                        <div class="mb-3">
+                            <label for="replyCommentInput" class="form-label">Comment</label>
+                            <textarea class="form-control" id="replyCommentInput" rows="1" placeholder="Your Reply"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Reply</button>
+                    </form>
+                   
+                </div>
+            </div>
+            <div class="card ms-5 mb-3">
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-muted">User 2</h6>
+                    <p class="card-text">I agree with the previous comment.</p>
+                </div>
+            </div>
+        </div>
+
+       
+
+    </div>
+</div>
+
+<script>
+    // Event listener for showing reply form
+    document.querySelectorAll('.reply-link').forEach(function (link) {
+        link.addEventListener('click', function (event) {
+            event.preventDefault();
+            var replyForm = this.nextElementSibling;
+            replyForm.style.display = (replyForm.style.display === 'none' || replyForm.style.display === '') ? 'block' : 'none';
+        });
+    });
+</script>

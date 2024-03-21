@@ -1,0 +1,139 @@
+﻿@page
+@model WEB.Pages.ChatModel
+<style>
+    .message-container {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+        overflow-y: auto; /* Bật cuộn dọc khi nội dung vượt quá kích thước */
+        max-height: 300px; /* Đặt chiều cao tối đa cho khung cuộn */
+    }
+
+        .message-container li {
+            margin-bottom: 10px;
+            word-wrap: break-word;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+    .user-message {
+        background-color: #007bff;
+        color: #fff;
+        align-self: flex-end;
+    }
+
+    .other-message {
+        background-color: #f8f9fa;
+        color: #000;
+        align-self: flex-start;
+    }
+</style>
+<div class="container">
+    <div class="row mt-3">
+        <div class="col-3">
+            <h2 class="text-center">Chat Application</h2>
+            <ul id="userList" class="list-group">
+                @foreach (var user in ViewBag.listView)
+                {
+                    <form method="get">
+                    <input name="reciveceder" value="@user.UserTo.UserId"  hidden/>
+                        <button class="btn btn-success">Chat @user.UserTo.Username</button>
+                    </form>
+                    <hr />
+                }
+            </ul>
+        </div>
+        @if (ViewBag.flag != 0)
+        {
+            <div class="col-9">
+                <div class="row mt-3">
+                    <div class="col-md-6 offset-md-3">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">User</span>
+                            <input type="text" class="form-control" id="userInput" value="@Model.UserCurrent.Username" readonly />
+                            <span class="input-group-text">To:...</span>
+                            <input type="text" class="form-control" id="userInput" value="@Model.UserTo.Username" readonly />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 offset-md-3">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Message</span>
+                            <input type="text" class="form-control" id="messageInput" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 offset-md-3">
+                        <button class="btn btn-primary" id="sendButton">Send Message</button>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6 offset-md-3">
+                        <hr />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 offset-md-3">
+                        <ul id="messagesList" class="message-container">
+                            @foreach (var message in Model.Messages)
+                            {
+                                var classUser = message.FromUserId == Model.UserCurrent.UserId ? "user-message" : "other-message";
+                                <li class="@classUser">@message.FromUser.Username: @message.MessageText - @message.SentTime</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+@if (Model.UserTo != null)
+{
+    <script>
+        "use strict";
+
+        var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+
+        //Disable the send button until connection is established.
+        document.getElementById("sendButton").disabled = true;
+
+        connection.on("ReceiveMessage", function (message) {
+            var li = document.createElement("li");
+            li.textContent = `${message.messageText}`;
+            li.classList.add(message.fromUserId === @Model.UserCurrent.UserId ? "user-message" : "other-message");
+            document.getElementById("messagesList").appendChild(li);
+
+            // Cuộn xuống dưới cùng sau khi thêm tin nhắn mới
+            var messageContainer = document.getElementById("messagesList");
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+        });
+
+        connection.start().then(function () {
+            document.getElementById("sendButton").disabled = false;
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        document.getElementById("sendButton").addEventListener("click", function (event) {
+            var messageText = document.getElementById("messageInput").value;
+
+            var message = {
+                fromUserId: @Model.UserCurrent.UserId,
+                toUserId: @Model.UserTo.UserId,
+                messageText: messageText,
+                sentTime: new Date()
+            };
+
+            // Gửi tin nhắn qua SignalR
+            connection.invoke("SendMessage", message).catch(function (err) {
+                return console.error(err.toString());
+            });
+            event.preventDefault();
+        });
+    </script>
+}

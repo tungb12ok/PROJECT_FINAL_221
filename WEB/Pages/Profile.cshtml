@@ -31,16 +31,20 @@
 <form method="POST">
     <div class="mb-3">
         <label for="currentPassword" class="form-label">Current Password</label>
-        <input asp-for="@Model.curPass" class="form-control" id="currentPassword" name="currentPassword" required>
+        <input class="form-control" id="currentPassword" name="currentPassword" required>
+        <span class="text-danger">@ViewData["CurPass"]</span>
     </div>
     <div class="mb-3">
         <label for="newPassword" class="form-label">New Password</label>
-        <input asp-for="@Model.pass" class="form-control" id="newPassword" name="newPassword" required>
-    </div>
+        <input class="form-control" id="newPassword" name="newPassword" required>
+        <span asp-validation-for="User.PasswordHash" class="text-danger"></span>
+        </div>
     <div class="mb-3">
         <label for="confirmNewPassword" class="form-label">Confirm New Password</label>
-        <input asp-for="@Model.rePass" class="form-control" id="confirmNewPassword" name="confirmNewPassword" required>
+        <input class="form-control" id="confirmNewPassword" name="confirmNewPassword" required>
+        <span class="text-danger"> @ViewData["RePass"]</span>
     </div>
+    <span class="text-success">@ViewData["Success"]</span></br>
     <button type="submit" class="btn btn-primary" asp-page-handler="ChangePassword">Change Password</button>
 </form>
 
