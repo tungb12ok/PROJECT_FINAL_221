@@ -38,9 +38,6 @@
                 <th>
                     Amount
                 </th>
-                <th>
-                    Action
-                </th>
             </tr>
         </thead>
         <tbody>
@@ -59,24 +56,29 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Status.StatusName)
                     </td>
-                    <td>
-                        @item.Amount
-                    </td>
-                    <td>
-                        <a class="btn btn-primary btn-sm" asp-page="/Admin/ManagerFinanciTransaction/Edit" asp-route-id="@item.TransactionId">Edit</a>
-                        <a class="btn btn-info btn-sm" asp-page="/Admin/ManagerFinanciTransaction/Details" asp-route-id="@item.TransactionId">Details</a>
-                        <a class="btn btn-danger btn-sm" asp-page="/Admin/ManagerFinanciTransaction/Delete" asp-route-id="@item.TransactionId">Delete</a>
-                    </td>
+                    @if (ViewBag.U.UserId == @item.Buyer.UserId)
+                    {
+                        <td class="text-danger">
+                            - @item.Amount
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="text-success">
+                            + @item.Amount
+                        </td>
+                    }
                 </tr>
             }
         </tbody>
         <tfoot class="bg-secondary text-white">
             <tr>
-                <td colspan="2">Total:</td>
-                <td colspan="1">@ViewData["total"]</td>
+                <td colspan="3">Total:</td>
+                <td colspan="2">@ViewData["total"]</td>
+            </tr>
+            <tr>
                 <td colspan="3">Total of Successful:</td>
-                <td colspan="1">@ViewData["totalSuccess"]</td>
-                <td colspan="1"></td>
+                <td colspan="2">@ViewData["totalSuccess"]</td>
             </tr>
     </table>
 </div>

@@ -24,36 +24,22 @@ namespace WEB.Pages.UserManager.MyTransactions
 
             var session = HttpContext.Session;
             U = Extenstions.SessionExtensions.Get<User>(session, "User");
-
-            List<Transaction> transSall = _context.Transactions
-                                            .Include(x => x.UserShipped)
-                                            .Include(x => x.Status)
-                                            .Include(x => x.Buyer)
-                                            .Include(x => x.Seller)
-                                            .Where(t => t.SellerId == U.UserId).ToList();
-            List<Transaction> transBuy = _context.Transactions
-                                            .Include(x => x.UserShipped)
-                                            .Include(x => x.Status)
-                                            .Include(x => x.Buyer)
-                                            .Include(x => x.Seller)
-                                            .Where(t => t.BuyerId == U.UserId).ToList();
-
-            if (transSall != null && transSall.Any())
+            if (U == null)
             {
-                foreach (Transaction transaction in transSall)
-                {
-                    MyList.Add(transaction);
-                }
+                U = new User();
+                U.UserId = 1;
             }
 
-            if (transBuy != null && transBuy.Any())
-            {
+            MyList = _context.Transactions
+                                .Include(x => x.UserShipped)
+                                .Include(x => x.Status)
+                                .Include(x => x.Buyer)
+                                .Include(x => x.Seller)
+                                .Include(x => x.Product)
+                                .Where(t => t.SellerId == U.UserId || t.BuyerId == U.UserId)
+                                .ToList();
+            ViewData[nameof(U)] = U;
 
-                foreach (Transaction transaction in transBuy)
-                {
-                    MyList.Add(transaction);
-                }
-            }
         }
     }
 }

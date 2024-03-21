@@ -1,6 +1,7 @@
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using WEB.Extenstions;
 
 namespace WEB.Pages
 {
@@ -31,13 +32,30 @@ namespace WEB.Pages
 
                 if (u != null)
                 {
+                    
                     var session = HttpContext.Session;
-                    Extenstions.SessionExtensions.Set<User>(session, "User", u);
-                    if (u.RoldeId == 1)
+                    if(u.StatusId == 8)
                     {
-                        return RedirectToPage("/Admin/Index");
-                    }
+                        Mess = "your account is baned!";
+                        return Page();
+                    } else if(u.StatusId == 10)
+                    {
+                        string otp = Helper.GenerateOTP();
+                        SaveOTPInSession(otp);
+                        Services.EmailSender ed = new Services.EmailSender();
+                        Extenstions.SessionExtensions.Set<User>(HttpContext.Session, "UserVeri", User);
 
+                        ed.SendEmail(u.Email, "Veri Account", "You OTP Authentication: " + otp);
+                        return RedirectToPage("/VeryPages");
+                    }
+                    else
+                    {
+                        Extenstions.SessionExtensions.Set<User>(session, "User", u);
+                        if (u.RoldeId == 1)
+                        {
+                            return RedirectToPage("/Admin/Index");
+                        }
+                    }
                     return RedirectToPage("/Index"); // Redirect to a success page
                 }
                 else
@@ -48,6 +66,10 @@ namespace WEB.Pages
 
             return Page();
         }
-
+        private void SaveOTPInSession(string otp)
+        {
+            HttpContext.Session.SetString("OTPAuthen", otp);
+            HttpContext.Session.SetInt32("OTPEXPIRY", 60);
+        }
     }
 }
