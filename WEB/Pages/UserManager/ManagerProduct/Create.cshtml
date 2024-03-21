@@ -13,9 +13,9 @@
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+            <div  class="form-group">
                 <label asp-for="Product.UserId" class="control-label"></label>
-                <input asp-for="Product.UserId" class="form-control" />
+                <select asp-for="Product.UserId" class="form-control" asp-items="ViewBag.UserId"></select>
                 <span asp-validation-for="Product.UserId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -46,6 +46,24 @@
                 <label asp-for="Product.StatusId" class="control-label"></label>
                 <select asp-for="Product.StatusId" class ="form-control" asp-items="ViewBag.StatusId"></select>
             </div>
+            <div class="form-group">
+                <label class="control-label">Image URLs</label>
+                <div id="imageUrls">
+                    <input type="text" asp-for="ImageUrls" class="form-control mb-2" />
+                </div>
+                <button type="button" class="btn btn-primary" onclick="addImageUrl()">Add Image URL</button>
+            </div>
+
+            <script>
+                function addImageUrl() {
+                    var input = document.createElement('input');
+                    input.type = 'text';
+                    input.name = 'ImageUrls';
+                    input.className = 'form-control mb-2';
+                    document.getElementById('imageUrls').appendChild(input);
+                }
+            </script>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
