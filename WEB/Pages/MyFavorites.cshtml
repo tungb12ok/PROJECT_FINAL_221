@@ -2,7 +2,58 @@
 @model WEB.Pages.MyFavoritesModel
 @{
 }
-<style>
+
+<!-- Thêm đoạn mã sau vào phần đầu của file _Layout.cshtml hoặc Index.cshtml để sử dụng Bootstrap -->
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/stylesheet.css">
+    <title>Product List</title>
+</head>
+<h1>My Favorite</h1>
+<div class="container">
+    @foreach (var product in Model.ProductsWithImages)
+    {
+        <div class="product">
+            <div id="carousel-@product.ProductId" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    @foreach (var imageUrl in product.ImageUrls)
+                    {
+                        <div class="carousel-item @(imageUrl == product.ImageUrls.First() ? "active" : "")">
+                            <img src="@imageUrl" class="d-block w-100" style="width:" alt="@product.Name">
+                        </div>
+                    }
+                </div>
+                <a class="carousel-control-prev" href="#carousel-@product.ProductId" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carousel-@product.ProductId" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+
+            <h2>@product.Name</h2>
+            <p>@product.Description</p>
+            <span class="price">$@product.Price</span>
+            <div class="buttons">
+                <button class="buy-button">Buy Now</button>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+
+@*<style>
     body {
         background-color: #f8f9fa;
     }
@@ -21,8 +72,7 @@
 </style>
     <div class="container mt-5">
         <h1 class="mb-4">Favorites</h1>
-
-        
+    
         <div class="row mb-3 product-card">
             <div class="col-md-6">
                 <img src="image1.jpg" class="img-fluid" alt="Product Image">
@@ -35,22 +85,5 @@
                 <button class="btn btn-primary">Chat with Seller</button>
             </div>
         </div>
-
-        
-
-        <!-- Product 3 -->
-        <div class="row mb-3 product-card">
-            <div class="col-md-6">
-                <img src="image3.jpg" class="img-fluid" alt="Product Image">
-            </div>
-            <div class="col-md-6">
-                <h2 class="mb-3">Product Name 3</h2>
-                <p class="text-muted mb-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nec justo vel velit condimentum vehicula.</p>
-                <p>Seller: Seller Name 3</p>
-                <button class="btn btn-primary me-2">Remove</button>
-                <button class="btn btn-primary">Chat with Seller</button>
-            </div>
-        </div>
-
-        <!-- Add more products as needed -->
-    </div>
+       
+    </div>*@

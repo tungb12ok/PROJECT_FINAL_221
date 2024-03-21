@@ -4,6 +4,12 @@
     ViewData["Title"] = "Home page";
 }
 
+<!-- Thêm đoạn mã sau vào phần đầu của file _Layout.cshtml hoặc Index.cshtml để sử dụng Bootstrap -->
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -11,60 +17,41 @@
     <link rel="stylesheet" href="~/css/stylesheet.css">
     <title>Product List</title>
 </head>
-<body>
-    <h1>Product List</h1>
-    <div class="container">
-        @*@foreach (var product in Model.products)
-        {
+<h1>Product List</h1>
+<div class="container">
+
+
+    @foreach (var product in Model.ProductsWithImages)
+    {
         <div class="product">
-        <img src="https://hoanghamobile.com/tin-tuc/wp-content/webp-express/webp-images/uploads/2023/08/hinh-nen-toi-12.jpg.webp" alt="@product.Name">
-        <h2>@product.Name</h2>
-        <p>@product.Description</p>
-        <span class="price">$@product.Price</span>
-        <div class="buttons">
-        <button class="buy-button">Buy Now</button>
-        <button class="cart-button">Add to Cart</button>
-        </div>
-        </div>
-        }*@
-        @foreach (var product in Model.ProductsWithImages)
-        {
-            <div class="product">
-                <div id="carousel-@product.ProductId" class="carousel slide" data-ride="carousel">
-                    <div class="carousel-inner">
-                        @foreach (var imageUrl in product.ImageUrls)
-                        {
-                            <div class="carousel-item @(imageUrl == product.ImageUrls.First() ? "active" : "")">
-                                <img src="@imageUrl" class="d-block w-100" alt="@product.Name">
-                            </div>
-                        }
-                    </div>
-                    <a class="carousel-control-prev" href="#carousel-@product.ProductId" role="button" data-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#carousel-@product.ProductId" role="button" data-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
+            <div id="carousel-@product.ProductId" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    @foreach (var imageUrl in product.ImageUrls)
+                    {
+                        <div class="carousel-item @(imageUrl == product.ImageUrls.First() ? "active" : "")">
+                            <img src="@imageUrl" class="d-block w-100" style="width:" alt="@product.Name">
+                        </div>
+                    }
                 </div>
-
-                <h2>@product.Name</h2>
-                <p>@product.Description</p>
-                <span class="price">$@product.Price</span>
-                <div class="buttons">
-                    <button class="buy-button">Buy Now</button>
-                    <form asp-page-handler="AddToFavourite"
-                      asp-route-productId="@product.ProductId">
-                      
-                        <button type="submit" class="favourite-button">Add to Your Favourite</button>
-                    </form>
-                </div>
+                <a class="carousel-control-prev" href="#carousel-@product.ProductId" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carousel-@product.ProductId" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
             </div>
-        }
-        <!-- Add more product entries as needed -->
 
-    </div>
-
-</body>
-</html>
+            <h2>@product.Name</h2>
+            <p>@product.Description</p>
+            <span class="price">$@product.Price</span>
+            <div class="buttons">
+                <button class="buy-button">Buy Now</button>
+                <form method="post" asp-page-handler="AddToFavourite" asp-route-productId="@product.ProductId" >
+                    <button type="submit" class="favourite-button">Add to Your Favourite</button>
+                </form>
+            </div>
+        </div>
+    }
+</div>

@@ -23,9 +23,13 @@ namespace WEB.Pages
         public User user { get; }
         public void OnGet()
         {
+            User u = Extenstions.SessionExtensions.Get<User>(HttpContext.Session, "User");
+
             // Lấy danh sách sản phẩm với danh sách hình ảnh từ cơ sở dữ liệu
             ProductsWithImages = _context.Products
+               
                 .Include(p => p.ProductImages)
+                 .Where(x => x.UserId == u.UserId)
                 .Select(p => new ProductViewModel
                 {
                     ProductId = p.ProductId,
@@ -42,7 +46,7 @@ namespace WEB.Pages
         }
         public async Task<IActionResult> OnPostAddToFavouriteAsync(int productId, int userId)
         {
-            // Lấy UserId của người dùng hiện tại
+            User u = Extenstions.SessionExtensions.Get<User>(HttpContext.Session, "User");
             // Kiểm tra xem sản phẩm đã được yêu thích trước đó chưa
             var existingFavourite = await _context.Favorites.FirstOrDefaultAsync(f => f.ProductId == productId);
 
@@ -51,7 +55,7 @@ namespace WEB.Pages
             {
                 var favourite = new Favorite
                 {
-                    UserId = userId, // Thay YourUserId bằng UserId của người dùng hiện tại
+                    UserId = u.UserId, // Thay YourUserId bằng UserId của người dùng hiện tại
                     ProductId = productId,
                     DateAdded = DateTime.Now
                 };
