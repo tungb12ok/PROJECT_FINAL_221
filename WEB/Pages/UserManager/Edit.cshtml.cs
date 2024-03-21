@@ -37,6 +37,7 @@ namespace WEB.Pages.UserManager
             Product = product;
            ViewData["CategoryId"] = new SelectList(_context.ProductCategories, "CategoryId", "CategoryName");
            ViewData["StatusId"] = new SelectList(_context.Statuses, "StatusId", "StatusName");
+             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Username");
             return Page();
         }
 
@@ -44,6 +45,7 @@ namespace WEB.Pages.UserManager
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
+
             if (!ModelState.IsValid)
             {
                 return Page();

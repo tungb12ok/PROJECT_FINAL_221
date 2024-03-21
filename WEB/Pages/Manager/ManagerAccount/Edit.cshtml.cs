@@ -46,17 +46,25 @@ namespace WEB.Pages.Manager.ManagerAccount
         {
             var errorMessage = "";
             var oldUser = _context.Users.FirstOrDefault(x => x.UserId == User.UserId);
-            var existUserName = _context.Users.FirstOrDefault(x => x.Username == User.Username);
 
-            if (existUserName != null)
+            if (oldUser.Username != User.Username)
             {
-                errorMessage += "Username already exists.";
+                var existUserName = _context.Users.FirstOrDefault(x => x.Username == User.Username);
+                if (existUserName != null)
+                {
+                    errorMessage += "Username already exists.";
+                }
             }
-            var existEmail = _context.Users.FirstOrDefault(x => x.Username == User.Username);
-            if (existEmail != null)
+
+            if (oldUser.Email != User.Email)
             {
-                errorMessage += "Email already exists.";
+                var existEmail = _context.Users.FirstOrDefault(x => x.Email == User.Email);
+                if (existEmail != null)
+                {
+                    errorMessage += "Email already exists.";
+                }
             }
+
             if (!string.IsNullOrEmpty(errorMessage))
             {
                 TempData["ErrorMessage"] = errorMessage;

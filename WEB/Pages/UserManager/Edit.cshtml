@@ -16,7 +16,7 @@
             <input type="hidden" asp-for="Product.ProductId" />
             <div class="form-group">
                 <label asp-for="Product.UserId" class="control-label"></label>
-                <input asp-for="Product.UserId" class="form-control" />
+                <input readonly asp-for="Product.UserId" class="form-control" />
                 <span asp-validation-for="Product.UserId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -39,16 +39,24 @@
                 <input asp-for="Product.Price" class="form-control" />
                 <span asp-validation-for="Product.Price" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Product.DatePosted" class="control-label"></label>
-                <input asp-for="Product.DatePosted" class="form-control" />
-                <span asp-validation-for="Product.DatePosted" class="text-danger"></span>
-            </div>
+            
             <div class="form-group">
                 <label asp-for="Product.StatusId" class="control-label"></label>
                 <select asp-for="Product.StatusId" class="form-control" asp-items="ViewBag.StatusId"></select>
                 <span asp-validation-for="Product.StatusId" class="text-danger"></span>
             </div>
+
+            <div class="form-group">
+                <label class="control-label">Image URLs</label>
+                <div id="imageUrls">
+                    @foreach (var imageUrl in Model.Product.ImageUrls)
+                    {
+                        <input type="text" asp-for="Product.ImageUrls" value="@imageUrl" class="form-control mb-2" />
+                    }
+                </div>
+                <button type="button" class="btn btn-primary" onclick="addImageUrl()">Add Image URL</button>
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -63,3 +71,12 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script>
+    function addImageUrl() {
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.name = 'Product.ImageUrls[]';
+        input.className = 'form-control mb-2';
+        document.getElementById('imageUrls').appendChild(input);
+    }
+</script>
