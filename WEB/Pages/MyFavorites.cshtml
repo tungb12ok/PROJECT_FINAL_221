@@ -1,0 +1,68 @@
+﻿@page
+@model WEB.Pages.MyFavoritesModel
+@{
+}
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .product-card {
+        background-color: #ffffff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    }
+
+        .product-card img {
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+</style>
+    <div class="container mt-5">
+        <h1 class="mb-4">Favorites</h1>
+
+        <!-- Product 1 -->
+        <div class="row mb-3 product-card">
+            <div class="col-md-6">
+                <img src="image1.jpg" class="img-fluid" alt="Product Image">
+            </div>
+            <div class="col-md-6">
+                <h2 class="mb-3">Product Name 1</h2>
+                <p class="text-muted mb-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nec justo vel velit condimentum vehicula.</p>
+                <p>Seller: Seller Name 1</p>
+                <button class="btn btn-primary me-2">Remove</button>
+                <button class="btn btn-primary">Chat with Seller</button>
+            </div>
+        </div>
+
+        <!-- Product 2 -->
+        <div class="row mb-3 product-card">
+            <div class="col-md-6">
+                <img src="image2.jpg" class="img-fluid" alt="Product Image">
+            </div>
+            <div class="col-md-6">
+                <h2 class="mb-3">Product Name 2</h2>
+                <p class="text-muted mb-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nec justo vel velit condimentum vehicula.</p>
+                <p>Seller: Seller Name 2</p>
+                <button class="btn btn-primary me-2">Remove</button>
+                <button class="btn btn-primary">Chat with Seller</button>
+            </div>
+        </div>
+
+        <!-- Product 3 -->
+        <div class="row mb-3 product-card">
+            <div class="col-md-6">
+                <img src="image3.jpg" class="img-fluid" alt="Product Image">
+            </div>
+            <div class="col-md-6">
+                <h2 class="mb-3">Product Name 3</h2>
+                <p class="text-muted mb-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nec justo vel velit condimentum vehicula.</p>
+                <p>Seller: Seller Name 3</p>
+                <button class="btn btn-primary me-2">Remove</button>
+                <button class="btn btn-primary">Chat with Seller</button>
+            </div>
+        </div>
+
+        <!-- Add more products as needed -->
+    </div>
