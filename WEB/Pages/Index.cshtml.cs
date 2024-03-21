@@ -41,24 +41,40 @@ namespace WEB.Pages
                 })
                 .ToList();
         }
-        public async Task<IActionResult> OnPostAddToFavouriteAsync(int productId, int userId)
+        public async Task<IActionResult> OnPostAddToFavouriteAsync(int productId)
         {
+            User u = Extenstions.SessionExtensions.Get<User>(HttpContext.Session, "User");
+            if(u == null)
+            {
+                return Redirect("/SignIn");
+            }
             // Lấy UserId của người dùng hiện tại
             // Kiểm tra xem sản phẩm đã được yêu thích trước đó chưa
-            var existingFavourite = await _context.Favorites.FirstOrDefaultAsync(f => f.ProductId == productId);
+            var existingFavourite = await _context.Favorites.FirstOrDefaultAsync(f => f.ProductId == productId && f.UserId == u.UserId);
 
             // Nếu sản phẩm chưa được yêu thích, thêm vào bảng Favorites
             if (existingFavourite == null)
             {
                 var favourite = new Favorite
                 {
-                    UserId = userId, // Thay YourUserId bằng UserId của người dùng hiện tại
+                    UserId = u.UserId, // Thay YourUserId bằng UserId của người dùng hiện tại
                     ProductId = productId,
                     DateAdded = DateTime.Now
                 };
-
-                _context.Favorites.Add(favourite);
-                await _context.SaveChangesAsync();
+                try
+                {
+                    _context.Favorites.Add(favourite);
+                    await _context.SaveChangesAsync();
+                    TempData["messSuccess"] = "Add into my favories Success";
+                }
+                catch (Exception ex)
+                {
+                    TempData["mess"] = "Add into my favories failed";
+                }
+            }
+            else
+            {
+                TempData["mess"] = "Product in exits into My Favorites";
             }
             return RedirectToPage();
         }

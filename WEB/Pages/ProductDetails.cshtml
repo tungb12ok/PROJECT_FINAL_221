@@ -7,28 +7,27 @@
         <!-- Left Column - Product Images -->
         <div class="col-md-6">
             <div class="mb-3">
-                <img src="image1.jpg" class="img-fluid mb-2" alt="Product Image">
+                <img src="@Model.Product.ProductImages.FirstOrDefault().ImageUrl" class="img-fluid mb-2" alt="Product Image">
                 <!-- Additional Product Images -->
                 <div class="row">
-                    <div class="col-4">
-                        <img src="image2.jpg" class="img-fluid" alt="Product Image">
-                    </div>
-                    <div class="col-4">
-                        <img src="image3.jpg" class="img-fluid" alt="Product Image">
-                    </div>
-                    <div class="col-4">
-                        <img src="image4.jpg" class="img-fluid" alt="Product Image">
-                    </div>
+                    @foreach (var item in Model.Images)
+                    {
+                        <div class="col-4">
+                            <img src="@item.ImageUrl" class="img-fluid" alt="Product Image">
+                        </div>
+                    }
                 </div>
             </div>
         </div>
 
         <!-- Right Column - Product Description -->
         <div class="col-md-6">
-            <h2 class="mb-4">Product Name</h2>
-            <p class="text-muted mb-4">Seller: Seller Name</p>
-            <p>Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nec justo vel velit condimentum vehicula.</p>
-            <button class="btn btn-primary">Chat</button>
+            <h2 class="mb-4">@Model.Product.Name</h2>
+            <p class="text-muted mb-4">Seller: @Model.Product.User.Username</p>
+            <p>Description: @Model.Product.Description .</p>
+            <a asp-page="/chat" asp-route-reciveceder="@Model.Product.UserId">
+                <button class="btn btn-primary">Chat</button>
+            </a>
         </div>
     </div>
 </div>
@@ -51,8 +50,8 @@
     <div id="comments">
         <div class="card mb-3">
             <div class="card-body">
-                <h5 class="card-title">User 1</h5>
-                <p class="card-text">This is a great comment!</p>
+                <h5 class="card-title">Kien</h5>
+                <p class="card-text">CÒn hàng không!</p>
                 <a href="#" class="card-link reply-link">Reply</a>
                 <div class="reply-form" style="display: none;">
                     <form class="reply-comment-form">
@@ -67,8 +66,8 @@
         </div>
         <div class="card mb-3">
             <div class="card-body">
-                <h5 class="card-title">User 1</h5>
-                <p class="card-text">This is a great comment!</p>
+                <h5 class="card-title">Tung</h5>
+                <p class="card-text">Good!!!!</p>
                 <a href="#" class="card-link reply-link">Reply</a>
                 <div class="reply-form" style="display: none;">
                     <form class="reply-comment-form">
@@ -78,18 +77,18 @@
                         </div>
                         <button type="submit" class="btn btn-primary">Submit Reply</button>
                     </form>
-                   
+
                 </div>
             </div>
             <div class="card ms-5 mb-3">
                 <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-muted">User 2</h6>
-                    <p class="card-text">I agree with the previous comment.</p>
+                    <h6 class="card-subtitle mb-2 text-muted">TùngLD</h6>
+                    <p class="card-text">Mua nhé.</p>
                 </div>
             </div>
         </div>
 
-       
+
 
     </div>
 </div>

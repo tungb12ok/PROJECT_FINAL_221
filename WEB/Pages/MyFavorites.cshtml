@@ -19,25 +19,32 @@
             margin-bottom: 20px;
         }
 </style>
-    <div class="container mt-5">
-        <h1 class="mb-4">Favorites</h1>
-
-        
+<div class="container mt-5">
+    <h1 class="mb-4">Favorites</h1>
+    <div class="alert-danger">
+        <p class="h3">@TempData["mess"]</p>
+    </div>
+    <div class="alert-success">
+        <p class="h3"> @TempData["messSuccess"]</p>
+    </div>
+    @foreach (var item in Model.Favorites)
+    {
         <div class="row mb-3 product-card">
             <div class="col-md-6">
-                <img src="image1.jpg" class="img-fluid" alt="Product Image">
+                <img src="@item.Product.ProductImages.FirstOrDefault().ImageUrl" class="img-fluid" alt="Product Image">
             </div>
             <div class="col-md-6">
-                <h2 class="mb-3">Product Name 1</h2>
-                <p class="text-muted mb-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus nec justo vel velit condimentum vehicula.</p>
-                <p>Seller: Seller Name 1</p>
-                <button class="btn btn-primary me-2">Remove</button>
-                <button class="btn btn-primary">Chat with Seller</button>
+                <h2 class="mb-3">@item.Product.Name</h2>
+                <p class="text-muted mb-3">@item.Product.Description</p>
+                <p>Seller: @item.User.Username</p>
+                <a asp-page="MyFavorites" asp-route-id="@item.ProductId" asp-page-handler="Remove">
+                    <button class="btn btn-primary me-2">Remove</button>
+                </a>
+                <a asp-page="/chat">
+                    <button class="btn btn-primary">Chat with Seller</button>
+                </a>
             </div>
         </div>
+    }
+</div>
 
-        
-        
-
-        <!-- Add more products as needed -->
-    </div>

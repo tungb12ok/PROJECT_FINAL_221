@@ -69,54 +69,66 @@
     <div class="row">
         <!-- Customer Info -->
         <div class="col-md-6">
-            <div class="info-card">
-                <h3>Customer Information</h3>
-                <p class="card-text"><strong>Customer Name:</strong> <input type="text" class="form-control" placeholder="Enter customer name"></p>
-                <p class="card-text"><strong>Address Line 1:</strong> <input type="text" class="form-control" placeholder="Enter address line 1"></p>
-                <p class="card-text"><strong>Address Line 2:</strong> <input type="text" class="form-control" placeholder="Enter address line 2"></p>
-                <p class="card-text"><strong>City:</strong> <input type="text" class="form-control" placeholder="Enter city"></p>
-                <p class="card-text"><strong>State:</strong> <input type="text" class="form-control" placeholder="Enter state"></p>
-                <p class="card-text"><strong>Country:</strong> <input type="text" class="form-control" placeholder="Enter country"></p>
-                <p class="card-text"><strong>Postal Code:</strong> <input type="text" class="form-control" placeholder="Enter postal code"></p>
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="info-card">
-                <h3>Product Information</h3>
-                <table class="table">
-                    <tbody>
-                        <tr>
-                            <th>Product Name:</th>
-                            <td><input type="text" class="form-control" placeholder="Enter product name"></td>
-                        </tr>
-                        <tr>
-                            <th>Description:</th>
-                            <td><input type="text" class="form-control" placeholder="Enter description"></td>
-                        </tr>
-                        <tr>
-                            <th>Price:</th>
-                            <td><input type="text" class="form-control" placeholder="Enter price"></td>
-                        </tr>
-                        <tr>
-                            <th>Stock Quantity:</th>
-                            <td><input type="text" class="form-control" placeholder="Enter stock quantity"></td>
-                        </tr>
-                        <tr>
-                            <th>Date Added:</th>
-                            <td><input type="text" class="form-control" placeholder="Enter date added"></td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th colspan="2">Shipping Fee: <input type="text" class="form-control" placeholder="Enter shipping fee"></th>
-                        </tr>
-                        <tr>
-                            <th colspan="2">Platform Fee: <input type="text" class="form-control" placeholder="Enter platform fee"></th>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
+            <form method="post">
+                <div class="info-card">
+                    <h3>Customer Information</h3>
+                    <p class="card-text"><strong>Customer Name:</strong> <input type="text" class="form-control" placeholder="Enter customer name"></p>
+                    <p class="card-text"><strong>Address Line 1:</strong> <input type="text" class="form-control" placeholder="Enter address line 1"></p>
+                    <p class="card-text"><strong>Address Line 2:</strong> <input type="text" class="form-control" placeholder="Enter address line 2"></p>
+                    <p class="card-text"><strong>City:</strong> <input type="text" class="form-control" placeholder="Enter city"></p>
+                    <p class="card-text"><strong>State:</strong> <input type="text" class="form-control" placeholder="Enter state"></p>
+                    <p class="card-text"><strong>Country:</strong> <input type="text" class="form-control" placeholder="Enter country"></p>
+                    <p class="card-text"><strong>Postal Code:</strong> <input type="text" class="form-control" placeholder="Enter postal code"></p>
+                    <button type="submit" class="btn btn-warning">Pay now</button>
+            </form>
         </div>
     </div>
+
+    <div class="col-md-6">
+        <div class="info-card">
+            <h3>Product Information</h3>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Product Name:</th>
+                        <td>@Model.Product.Name</td>
+                    </tr>
+                    <tr>
+                        <th>Images:</th>
+                        <td>
+                            <img src="@Model.Product.ProductImages.FirstOrDefault().ImageUrl" style="width: 30%; height:30%;" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Price:</th>
+                        <td>@DataAccess.ViewModel.FormatViewModel.GetFormatVND(Model.Product.Price) VND</td>
+                    </tr>
+                    <tr>
+                        <th>Saller:</th>
+                        <td>
+                            @Model.Product.User.Username
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Date Added:</th>
+                        <td><input type="text" class="form-control" placeholder="Enter date added" value="@DateTime.Now" readonly></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="2">Shipping Fee: 25.0000  VND</th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Platform Fee: 10,0000 VND</th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Total: @DataAccess.ViewModel.FormatViewModel.GetFormatVND(Model.Product.Price + 10000 + 25000) VND</th>
+                    </tr>
+                </tfoot>
+
+            </table>
+
+        </div>
+    </div>
+</div>
 </div>

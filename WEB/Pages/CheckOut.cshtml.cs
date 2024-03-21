@@ -1,6 +1,7 @@
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace WEB.Pages
 {
@@ -16,7 +17,10 @@ namespace WEB.Pages
         public List<UserShipped> UserShippeds { get; set; }
         public IActionResult OnGet(int id)
         {
-            Product = _context.Products.FirstOrDefault(x => x.ProductId == id && x.StatusId == 1);
+            Product = _context.Products
+                .Include(x => x.ProductImages)
+                .Include(x => x.User)
+                .FirstOrDefault(x => x.ProductId == id && x.StatusId == 1);
             if (Product == null)
             {
                 return Redirect("/Index");
