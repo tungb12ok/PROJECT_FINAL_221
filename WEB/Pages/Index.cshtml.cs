@@ -18,11 +18,11 @@ namespace WEB.Pages
             _context = context;
         }
         public List<ProductViewModel> ProductsWithImages { get; set; }
+        public List<Product> products { get; set; }
 
         public User user { get; }
         public void OnGet()
         {
-            //products=_context.Products.ToList();
             // Lấy danh sách sản phẩm với danh sách hình ảnh từ cơ sở dữ liệu
             ProductsWithImages = _context.Products
                 .Include(p => p.ProductImages)

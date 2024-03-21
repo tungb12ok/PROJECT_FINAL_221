@@ -24,6 +24,7 @@ namespace DataAccess.Models
 
         public virtual ProductCategory? Category { get; set; }
         public virtual Status Status { get; set; } = null!;
+        public virtual User? User { get; set; }
         public virtual ICollection<Favorite> Favorites { get; set; }
         public virtual ICollection<ProductImage> ProductImages { get; set; }
         public virtual ICollection<ProductReview> ProductReviews { get; set; }

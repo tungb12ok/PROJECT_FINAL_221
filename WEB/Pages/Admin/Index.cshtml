@@ -1,0 +1,107 @@
+﻿@page
+@model WEB.Pages.Admin.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 class="mb-4">Manager Financial Transaction</h1>
+<div class="mb-3">
+    <form id="filterForm" method="GET" asp-page-handler="Filter">
+        <input type="text" class="form-control" placeholder="Search" id="searchInput" />
+        <select id="statusSelect" asp-for="@Model.SelectedStatus" name="SelectedStatus">
+            <option value="">-- Select Status --</option>
+            @foreach (var status in Model.StatusList)
+            {
+                <option value="@status">@status</option>
+            }
+        </select>
+        <button type="submit" class="btn btn-primary mt-2">Apply Filters</button>
+    </form>
+</div>
+
+
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover">
+        <thead class="bg-success text-white">
+            <tr>
+                <th>
+                    Username
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FinancialTransaction[0].TransactionType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FinancialTransaction[0].Amount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FinancialTransaction[0].TransactionDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FinancialTransaction[0].Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FinancialTransaction[0].User)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FinancialTransaction[0].Status)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.FilteredTransactions)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.User.Username)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TransactionType)
+                    </td>
+                    <td>
+                        @FormatViewModel.GetFormatVND(item.Amount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TransactionDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.User.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" asp-page="/Admin/ManagerFinanciTransaction/Edit" asp-route-id="@item.TransactionId">Edit</a>
+                        <a class="btn btn-info btn-sm" asp-page="/Admin/ManagerFinanciTransaction/Details" asp-route-id="@item.TransactionId">Details</a>
+                        <a class="btn btn-danger btn-sm" asp-page="/Admin/ManagerFinanciTransaction/Delete" asp-route-id="@item.TransactionId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot class="bg-secondary text-white">
+            <tr>
+                <td colspan="2">Total:</td>
+                <td colspan="1">@ViewData["total"]</td>
+                <td colspan="3">Total of Successful:</td>
+                <td colspan="1">@ViewData["totalSuccess"]</td>
+                <td colspan="1"></td>
+            </tr>
+    </table>
+</div>
+<div class="d-md-table-cell d-md-block">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" asp-page="./Index" asp-route-pageNumber="@i">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>

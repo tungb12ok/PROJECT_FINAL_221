@@ -1,13 +1,18 @@
 using DataAccess.Models;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Exe;
-var builder = WebApplication.CreateBuilder(args);
+using WEB.Services;
+using WEB.Hubs;
+using static WEB.Pages.ChatModel;
 
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddSignalR();
+builder.Services.AddLogging();
 // Add services to the container.
 builder.Services.AddDbContext<QuickMarketContext>();
 builder.Services.AddRazorPages();
 
-builder.Services.AddHostedService<TimerService>();
+builder.Services.AddHostedService<CheckingPaymentService>();
 
 // Add session and necessary services
 builder.Services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
@@ -26,6 +31,7 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
+app.MapHub<WEB.Hubs.ChatHub>("/chatHub");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
