@@ -2,8 +2,12 @@ using DataAccess.Models;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Exe;
 using WEB.Services;
-var builder = WebApplication.CreateBuilder(args);
+using WEB.Hubs;
+using static WEB.Pages.ChatModel;
 
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddSignalR();
+builder.Services.AddLogging();
 // Add services to the container.
 builder.Services.AddDbContext<QuickMarketContext>();
 builder.Services.AddRazorPages();
@@ -27,6 +31,7 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
+app.MapHub<WEB.Hubs.ChatHub>("/chatHub");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

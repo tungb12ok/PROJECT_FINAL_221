@@ -58,7 +58,7 @@ namespace WEB.Pages
                     }
                     else
                     {
-                        ViewData["mess"] = "Account veried successfuly!";
+                        ViewData["mess"] = "Account veried Failed!";
                         ViewData["flag"] = 1;
                     }
                 }

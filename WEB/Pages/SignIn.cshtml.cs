@@ -43,7 +43,7 @@ namespace WEB.Pages
                         string otp = Helper.GenerateOTP();
                         SaveOTPInSession(otp);
                         Services.EmailSender ed = new Services.EmailSender();
-                        Extenstions.SessionExtensions.Set<User>(HttpContext.Session, "UserVeri", User);
+                        Extenstions.SessionExtensions.Set<User>(HttpContext.Session, "UserVeri", u);
 
                         ed.SendEmail(u.Email, "Veri Account", "You OTP Authentication: " + otp);
                         return RedirectToPage("/VeryPages");
