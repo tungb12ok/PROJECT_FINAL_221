@@ -26,8 +26,7 @@ namespace WEB.Pages
             User u = Extenstions.SessionExtensions.Get<User>(HttpContext.Session, "User");
 
             // Lấy danh sách sản phẩm với danh sách hình ảnh từ cơ sở dữ liệu
-            ProductsWithImages = _context.Products
-               
+            ProductsWithImages = _context.Products               
                 .Include(p => p.ProductImages)
                  .Where(x => x.UserId == u.UserId)
                 .Select(p => new ProductViewModel
