@@ -54,7 +54,7 @@ namespace WEB.Pages.Manager.ManagerAccount
             //{
             //    return Page();
             //}
-
+            User.LastLogin = DateTime.Now;
             User.DateCreated = DateTime.Now;
             _context.Users.Add(User);
             await _context.SaveChangesAsync();

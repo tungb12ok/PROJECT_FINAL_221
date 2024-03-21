@@ -28,9 +28,11 @@ namespace WEB.Pages
             if (User != null)
             {
                 var u = _quickMarketContext.Users.FirstOrDefault(x => x.Username == User.Username && x.PasswordHash == User.PasswordHash);
-
+                
                 if (u != null)
                 {
+                    u.LastLogin = DateTime.Now;
+                    _quickMarketContext.SaveChanges();
                     if (u.RoldeId == 1)
                     {
                         return RedirectToPage("/Admin/Index");

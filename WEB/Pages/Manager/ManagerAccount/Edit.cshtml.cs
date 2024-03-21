@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
+using DocumentFormat.OpenXml.Office2010.Excel;
 
 namespace WEB.Pages.Manager.ManagerAccount
 {
@@ -29,13 +30,13 @@ namespace WEB.Pages.Manager.ManagerAccount
                 return NotFound();
             }
 
-            var user =  await _context.Users.FirstOrDefaultAsync(m => m.UserId == id);
+            var user = await _context.Users.FirstOrDefaultAsync(m => m.UserId == id);
             if (user == null)
             {
                 return NotFound();
             }
             User = user;
-           ViewData["RoldeId"] = new SelectList(_context.Roles, "RoleId", "RoleName");
+            ViewData["RoldeId"] = new SelectList(_context.Roles, "RoleId", "RoleName");
             return Page();
         }
 
@@ -43,32 +44,43 @@ namespace WEB.Pages.Manager.ManagerAccount
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            var u = _context.Users.FirstOrDefault(x => x.UserId == User.UserId );
-            User.DateCreated = u.DateCreated;
-            _context.Attach(User).State = EntityState.Modified;
+            var errorMessage = "";
+            var oldUser = _context.Users.FirstOrDefault(x => x.UserId == User.UserId);
+            var existUserName = _context.Users.FirstOrDefault(x => x.Username == User.Username);
 
-            try
+            if (existUserName != null)
             {
-                await _context.SaveChangesAsync();
+                errorMessage += "Username already exists.";
             }
-            catch (DbUpdateConcurrencyException)
+            var existEmail = _context.Users.FirstOrDefault(x => x.Username == User.Username);
+            if (existEmail != null)
             {
-                if (!UserExists(User.UserId))
+                errorMessage += "Email already exists.";
+            }
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                TempData["ErrorMessage"] = errorMessage;
+                var user = await _context.Users.FirstOrDefaultAsync(m => m.UserId == User.UserId);
+                if (user == null)
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+                User = user;
+                ViewData["RoldeId"] = new SelectList(_context.Roles, "RoleId", "RoleName");
+                return Page();
             }
 
+            oldUser.Username = User.Username;
+            oldUser.Email = User.Email;
+            oldUser.PasswordHash = User.PasswordHash;
+            oldUser.RoldeId = User.RoldeId;
+            _context.SaveChanges();
             return RedirectToPage("./Index");
         }
 
         private bool UserExists(int id)
         {
-          return (_context.Users?.Any(e => e.UserId == id)).GetValueOrDefault();
+            return (_context.Users?.Any(e => e.UserId == id)).GetValueOrDefault();
         }
     }
 }
