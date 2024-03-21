@@ -26,6 +26,7 @@ namespace WEB.Pages
             // Lấy danh sách sản phẩm với danh sách hình ảnh từ cơ sở dữ liệu
             ProductsWithImages = _context.Products
                 .Include(p => p.ProductImages)
+                .Where(p => p.StatusId == 1)
                 .Select(p => new ProductViewModel
                 {
                     ProductId = p.ProductId,

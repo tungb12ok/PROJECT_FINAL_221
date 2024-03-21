@@ -9,6 +9,7 @@
 
 <h4>Product</h4>
 <hr />
+
 <div class="row">
     <div class="col-md-4">
         <form method="post">
@@ -49,10 +50,11 @@
             <div class="form-group">
                 <label class="control-label">Image URLs</label>
                 <div id="imageUrls">
-                    @* @foreach (var imageUrl in Model.Product.ImageUrls)
+                    @foreach (var imageUrl in ViewBag.img)
                     {
-                        <input type="text" asp-for="Product.ImageUrls" value="@imageUrl" class="form-control mb-2" />
-                    } *@
+                        <input type="text" asp-for="ImageUrls" value="@imageUrl.ImageUrl" class="form-control mb-2" />
+                        <img src="@imageUrl.ImageUrl" style="width: 30%; height: 30%;" />
+                    }
                 </div>
                 <button type="button" class="btn btn-primary" onclick="addImageUrl()">Add Image URL</button>
             </div>
