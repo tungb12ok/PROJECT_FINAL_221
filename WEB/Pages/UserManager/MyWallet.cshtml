@@ -35,8 +35,8 @@
     <div class="card mb-4 alert-info">
         <div class="card-body">
             <h5 class="card-title">Wallet Summary</h5>
-            <p class="card-text">Total Amount: $500</p>
-            <p class="card-text">Last Transaction: 2024-03-21</p>
+            <p class="card-text">Total Amount: @DataAccess.ViewModel.FormatViewModel.GetFormatVND(ViewBag.summary.total)VNĐ</p>
+            <p class="card-text">Last Transaction: @ViewBag.summary.lastTime</p>
         </div>
     </div>
 
@@ -51,25 +51,22 @@
         <thead class="bg-success">
             <tr>
                 <th scope="col" class="sortable" onclick="sortTable(0)">Transaction ID<span class="sort-icon"></span></th>
-                <th scope="col" class="sortable" onclick="sortTable(1)" >Amount<span class="sort-icon"></span></th>
+                <th scope="col" class="sortable" onclick="sortTable(1)">Amount<span class="sort-icon"></span></th>
                 <th scope="col" class="sortable" onclick="sortTable(2)">Date<span class="sort-icon"></span></th>
                 <th scope="col">Status</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>$100</td>
-                <td>2024-03-20</td>
-                <td>Success</td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>$200</td>
-                <td>2024-03-18</td>
-                <td>Pending</td>
-            </tr>
-            <!-- Add more transaction rows as needed -->
+            @foreach (var item in Model.ListFT)
+            {
+                <tr>
+                    <th scope="row">@item.TransactionId</th>
+                    <td class="text-success">+ @DataAccess.ViewModel.FormatViewModel.GetFormatVND(item.Amount)VNĐ</td>
+                    <td>@item.TransactionDate</td>
+                    <td>@item.Status</td>
+                </tr>
+            }
+
         </tbody>
     </table>
 </div>
