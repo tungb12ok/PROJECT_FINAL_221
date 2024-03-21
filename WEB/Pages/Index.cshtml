@@ -1,7 +1,6 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -41,6 +40,38 @@
 <body>
 
     <h1>Product List</h1>
+    <!-- Filter Form -->
+    <div class="container filter-form">
+        <form method="get">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="name">Product Name:</label>
+                    <input type="text" class="form-control" id="name" name="name">
+                </div>
+                <div class="form-group">
+                    <label for="min">Minimum Price:</label>
+                    <input type="number" class="form-control" id="min" name="min">
+                </div>
+                <div class="form-group">
+                    <label for="max">Maximum Price:</label>
+                    <input type="number" class="form-control" id="max" name="max">
+                </div>
+                <div class="form-group">
+                    <label for="category">Category:</label>
+                    <select class="form-control" id="category" name="category">
+                       <option value="">All</option>
+                        @foreach (var item in Model.ProductCategories)
+                        {
+                            <option value="@item.CategoryId">@item.CategoryName</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </div>
+            </div>
+        </form>
+    </div>
     <div class="alert-danger">
         <p class="h3">@TempData["mess"]</p>
     </div>
@@ -48,7 +79,7 @@
         <p class="h3"> @TempData["messSuccess"]</p>
     </div>
     <div class="container">
-        @foreach (var product in Model.ProductsWithImages)
+        @foreach (var product in Model.products)
         {
             <div class="row mb-4">
                 <div class="col-12">
@@ -57,10 +88,10 @@
                             <div class="col-md-6">
                                 <div id="carousel-@product.ProductId" class="carousel slide" data-ride="carousel">
                                     <div class="carousel-inner">
-                                        @foreach (var imageUrl in product.ImageUrls.Take(1))
+                                        @foreach (var image in product.ProductImages)
                                         {
-                                            <div class="carousel-item @(imageUrl == product.ImageUrls.First() ? "active" : "")">
-                                                <img src="@imageUrl" class="d-block w-100 img-fluid" alt="@product.Name">
+                                            <div class="carousel-item @(image == product.ProductImages.First() ? "active" : "")">
+                                                <img src="@image.ImageUrl" class="d-block w-100 img-fluid" alt="@product.Name">
                                             </div>
                                         }
                                     </div>

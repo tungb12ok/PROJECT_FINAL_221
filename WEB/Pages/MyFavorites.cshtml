@@ -40,7 +40,7 @@
                 <a asp-page="MyFavorites" asp-route-id="@item.ProductId" asp-page-handler="Remove">
                     <button class="btn btn-primary me-2">Remove</button>
                 </a>
-                <a asp-page="/chat">
+                <a asp-page="/chat" asp-route-reciveceder="@item.Product.UserId">
                     <button class="btn btn-primary">Chat with Seller</button>
                 </a>
             </div>

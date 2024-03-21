@@ -38,7 +38,8 @@ namespace WEB.Pages.UserManager.ManagerProduct
             {
                 return Page();
             }
-
+            User user = Extenstions.SessionExtensions.Get<User>(HttpContext.Session, "User");
+            Product.UserId = user.UserId;
             _context.Products.Add(Product);
             await _context.SaveChangesAsync();
 

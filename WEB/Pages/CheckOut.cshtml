@@ -70,15 +70,20 @@
         <!-- Customer Info -->
         <div class="col-md-6">
             <form method="post">
+                <input name="pId" value="@Model.Product.ProductId" hidden/>
+                <input name="uId" value="@Model.Product.UserId" hidden />
+
+                <input name="p" value="@Model.Product.Price" hidden />
+
                 <div class="info-card">
                     <h3>Customer Information</h3>
-                    <p class="card-text"><strong>Customer Name:</strong> <input type="text" class="form-control" placeholder="Enter customer name"></p>
-                    <p class="card-text"><strong>Address Line 1:</strong> <input type="text" class="form-control" placeholder="Enter address line 1"></p>
-                    <p class="card-text"><strong>Address Line 2:</strong> <input type="text" class="form-control" placeholder="Enter address line 2"></p>
-                    <p class="card-text"><strong>City:</strong> <input type="text" class="form-control" placeholder="Enter city"></p>
-                    <p class="card-text"><strong>State:</strong> <input type="text" class="form-control" placeholder="Enter state"></p>
-                    <p class="card-text"><strong>Country:</strong> <input type="text" class="form-control" placeholder="Enter country"></p>
-                    <p class="card-text"><strong>Postal Code:</strong> <input type="text" class="form-control" placeholder="Enter postal code"></p>
+                    <p class="card-text"><strong>Customer Name:</strong> <input type="text" class="form-control" placeholder="Enter customer name" ></p>
+                    <p class="card-text"><strong>Address Line 1:</strong> <input asp-for="@Model.Shipped.AddressLine1" class="form-control" placeholder="Enter address line 1" required></p>
+                    <p class="card-text"><strong>Address Line 2:</strong> <input asp-for="@Model.Shipped.AddressLine2" class="form-control" placeholder="Enter address line 2" required></p>
+                    <p class="card-text"><strong>City:</strong> <input asp-for="@Model.Shipped.City" class="form-control" placeholder="Enter city" required></p>
+                    <p class="card-text"><strong>State:</strong> <input asp-for="@Model.Shipped.State" class="form-control" placeholder="Enter state" required></p>
+                    <p class="card-text"><strong>Country:</strong> <input asp-for="@Model.Shipped.Country" class="form-control" placeholder="Enter country" required></p>
+                    <p class="card-text"><strong>Postal Code:</strong> <input asp-for="@Model.Shipped.PostalCode" class="form-control" placeholder="Enter postal code" required></p>
                     <button type="submit" class="btn btn-warning">Pay now</button>
             </form>
         </div>

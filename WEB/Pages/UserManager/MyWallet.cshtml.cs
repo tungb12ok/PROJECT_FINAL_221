@@ -24,7 +24,7 @@ namespace WEB.Pages.UserManager
             ListFT = _context.FinancialTransactions.Where(x => x.UserId == u.UserId).ToList();
             if(ListFT.Count > 0)
             {
-                decimal total = _context.FinancialTransactions.Where(x => x.UserId == u.UserId).Sum(x => x.Amount);
+                decimal total = _context.FinancialTransactions.Where(x => x.UserId == u.UserId && x.Status.Equals("Successful")).Sum(x => x.Amount);
                 var lastTime = _context.FinancialTransactions
                     .Where(ft => ft.UserId == u.UserId)
                     .OrderByDescending(ft => ft.TransactionDate)

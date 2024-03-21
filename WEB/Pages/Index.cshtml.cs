@@ -5,6 +5,9 @@ using WEB.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Identity;
+using BussinessLogic.Repository;
+using BussinessLogic;
+using DocumentFormat.OpenXml.InkML;
 
 namespace WEB.Pages
 {
@@ -12,39 +15,25 @@ namespace WEB.Pages
     {
 
         private readonly QuickMarketContext _context;
-
         public IndexModel(QuickMarketContext context)
         {
             _context = context;
         }
         public List<ProductViewModel> ProductsWithImages { get; set; }
         public List<Product> products { get; set; }
-
+        public List<ProductCategory> ProductCategories { get; set; }
         public User user { get; }
-        public void OnGet()
+        public void OnGet(string? name, int? min, int? max, int? category)
         {
-            // Lấy danh sách sản phẩm với danh sách hình ảnh từ cơ sở dữ liệu
-            ProductsWithImages = _context.Products
-                .Include(p => p.ProductImages)
-                .Where(p => p.StatusId == 1)
-                .Select(p => new ProductViewModel
-                {
-                    ProductId = p.ProductId,
-                    UserId = p.UserId,
-                    CategoryId = p.CategoryId,
-                    Name = p.Name,
-                    Description = p.Description,
-                    Price = p.Price,
-                    DatePosted = p.DatePosted,
-                    StatusId = p.StatusId,
-                    ImageUrls = p.ProductImages.Select(pi => pi.ImageUrl).ToList()
-                })
-                .ToList();
+            products = filter(category, name, min, max);
+
+            ProductCategories = _context.ProductCategories.ToList();
+
         }
         public async Task<IActionResult> OnPostAddToFavouriteAsync(int productId)
         {
             User u = Extenstions.SessionExtensions.Get<User>(HttpContext.Session, "User");
-            if(u == null)
+            if (u == null)
             {
                 return Redirect("/SignIn");
             }
@@ -77,6 +66,46 @@ namespace WEB.Pages
                 TempData["mess"] = "Product in exits into My Favorites";
             }
             return RedirectToPage();
+        }
+        public List<Product> filter(int? cateId, string name, int? min, int? max)
+        {
+            List<Product> products = _context.Products.Include(x => x.User)
+                    .Include(x => x.Category)
+                    .Include(x => x.Status)
+                    .Include(x => x.ProductImages)
+                    .ToList();
+
+            if (cateId != null)
+            {
+                products = _context.Products
+                    .Include(x => x.Category)
+                    .Include(x => x.Status)
+                    .Include(x => x.ProductImages)
+                    .Where(x => x.CategoryId == cateId).ToList();
+
+            }
+            if (name != null)
+            {
+                products = _context.Products.Where(x => x.Name.Contains(name)).ToList();
+
+            }
+            if (min != null && max != null)
+            {
+                products = _context.Products.Where(x => x.Price >= min && x.Price <= max).ToList();
+
+            }
+            if (min != null && max == null)
+            {
+                products = _context.Products.Where(x => x.Price >= min).ToList();
+
+            }
+            if (max != null && min == null)
+            {
+                products = _context.Products.Where(x => x.Price <= max).ToList();
+
+            }
+            products = products.Where(x => x.StatusId == 1).ToList();
+            return products;
         }
     }
 }
