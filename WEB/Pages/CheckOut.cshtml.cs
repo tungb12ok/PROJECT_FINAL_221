@@ -12,10 +12,11 @@ namespace WEB.Pages
         {
             _context = context;
         }
-
+        public List<UserShipped> UserShippeds { get; set; }
         public void OnGet()
         {
-
+            User u = Extenstions.SessionExtensions.Get<User>(HttpContext.Session, "User");
+            UserShippeds = _context.UserShippeds.Where(x => x.Transaction.BuyerId == u.UserId).ToList();   
         }
     }
 }
