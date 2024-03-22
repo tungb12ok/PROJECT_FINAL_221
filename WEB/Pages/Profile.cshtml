@@ -21,7 +21,8 @@
         <!-- Hiển thị số dư -->
         <div class="mb-3">
             <label for="balance" class="form-label">Balance</label>
-            <input asp-for="User.Wallet.Balance" class="form-control" id="balance" name="balance" placeholder="Your Balance" readonly>
+            <input class="form-control" type="text" value="@DataAccess.ViewModel.FormatViewModel.GetFormatVND(Model.User.Wallet.Balance) VND" readonly />
+            <input asp-for="User.Wallet.Balance" class="form-control" id="balance" name="balance" placeholder="Your Balance" readonly hidden>
         </div>
     </div>
 </div>
