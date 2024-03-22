@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using BussinessLogic.Repository;
 using BussinessLogic;
 using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace WEB.Pages
 {
@@ -23,12 +24,22 @@ namespace WEB.Pages
         public List<Product> products { get; set; }
         public List<ProductCategory> ProductCategories { get; set; }
         public User user { get; }
-        public void OnGet(string? name, int? min, int? max, int? category)
+        public int PageNumber { get; set; } = 1;
+        public int TotalPages { get; set; }
+         const int pageSize = 5;
+        public void OnGet(string? name, int? min, int? max, int? category, int? pageNumber)
         {
-            products = filter(category, name, min, max);
+            PageNumber = pageNumber ?? 1;
+            products = filter(category, name, min, max, PageNumber);
 
             ProductCategories = _context.ProductCategories.ToList();
 
+           
+            TotalPages = (int)Math.Ceiling(products.Count / (double)pageSize);
+            products = products
+                .Skip((PageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
         }
         public async Task<IActionResult> OnPostAddToFavouriteAsync(int productId)
         {
@@ -67,17 +78,21 @@ namespace WEB.Pages
             }
             return RedirectToPage();
         }
-        public List<Product> filter(int? cateId, string name, int? min, int? max)
+        public List<Product> filter(int? cateId, string name, int? min, int? max, int? pageNumber)
         {
-            List<Product> products = _context.Products.Include(x => x.User)
+            List<Product> products = _context.Products
+
+                .Include(x => x.User)
                     .Include(x => x.Category)
                     .Include(x => x.Status)
                     .Include(x => x.ProductImages)
                     .ToList();
 
+           
+
             if (cateId != null)
             {
-                products = _context.Products
+                products = _context.Products                    
                     .Include(x => x.Category)
                     .Include(x => x.Status)
                     .Include(x => x.ProductImages)
