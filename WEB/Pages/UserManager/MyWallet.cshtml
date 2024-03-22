@@ -57,14 +57,24 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.ListFT)
+            @if (Model.ListFT != null)
             {
-                <tr>
-                    <th scope="row">@item.TransactionId</th>
-                    <td class="text-success">+ @DataAccess.ViewModel.FormatViewModel.GetFormatVND(item.Amount)VNĐ</td>
-                    <td>@item.TransactionDate</td>
-                    <td>@item.Status</td>
-                </tr>
+                @foreach (var item in Model.ListFT)
+                {
+                    <tr>
+                        <th scope="row">@item.TransactionId</th>
+                        @if (@item.Status.Equals("Successful"))
+                        {
+                            <td class="text-success">+ @DataAccess.ViewModel.FormatViewModel.GetFormatVND(item.Amount)VNĐ</td>
+                        }
+                        else
+                        {
+                            <td class="text-danger">@DataAccess.ViewModel.FormatViewModel.GetFormatVND(item.Amount)VNĐ</td>
+                        }
+                        <td>@item.TransactionDate</td>
+                        <td>@item.Status</td>
+                    </tr>
+                }
             }
 
         </tbody>

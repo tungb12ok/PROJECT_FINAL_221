@@ -22,8 +22,10 @@ namespace WEB.Services
             FinancialTransactionRepository f = new FinancialTransactionRepository();
 
             List<FinancialTransaction> ftList = context.FinancialTransactions
-                                                        .Where(x => x.Status == "Pending")
-                                                        .ToList();
+                                                           .Where(x => x.Status == "Pending")
+                                                           .Take(50)
+                                                           .ToList();
+
             foreach (FinancialTransaction ft in ftList)
         {
                 if (await CheckingPayment.CheckingBanking(ft))
@@ -137,7 +139,7 @@ namespace WEB.Services
                         keyword = "",
                         maxAcentrysrno = "",
                         pageNumber = 1,
-                        pageSize = 400,
+                        pageSize = 50,
                         toDate = currentDate
                     };
 

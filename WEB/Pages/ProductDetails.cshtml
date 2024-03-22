@@ -35,61 +35,50 @@
     <h1 class="mb-4">Comments</h1>
 
     <!-- Form for adding new comment -->
-    <form id="commentForm">
-
+    <form id="commentForm" method="post">
+        <input type="text" name="pId" value="@Model.Product.ProductId" hidden />
         <div class="mb-3">
             <label for="commentInput" class="form-label">Comment</label>
-            <textarea class="form-control" id="commentInput" rows="3" placeholder="Your Comment"></textarea>
+            <textarea class="form-control" id="commentInput" rows="3" placeholder="Your Comment" name="comment"></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 
     <hr>
 
-    <!-- Display existing comments -->
     <div id="comments">
-        <div class="card mb-3">
-            <div class="card-body">
-                <h5 class="card-title">Kien</h5>
-                <p class="card-text">CÒn hàng không!</p>
-                <a href="#" class="card-link reply-link">Reply</a>
-                <div class="reply-form" style="display: none;">
-                    <form class="reply-comment-form">
-                        <div class="mb-3">
-                            <label for="replyCommentInput" class="form-label">Comment</label>
-                            <textarea class="form-control" id="replyCommentInput" rows="1" placeholder="Your Reply"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit Reply</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="card mb-3">
-            <div class="card-body">
-                <h5 class="card-title">Tung</h5>
-                <p class="card-text">Good!!!!</p>
-                <a href="#" class="card-link reply-link">Reply</a>
-                <div class="reply-form" style="display: none;">
-                    <form class="reply-comment-form">
-                        <div class="mb-3">
-                            <label for="replyCommentInput" class="form-label">Comment</label>
-                            <textarea class="form-control" id="replyCommentInput" rows="1" placeholder="Your Reply"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit Reply</button>
-                    </form>
 
-                </div>
-            </div>
-            <div class="card ms-5 mb-3">
+        @foreach (var item in Model.ListComment)
+        {
+            <div class="card mb-3">
                 <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-muted">TùngLD</h6>
-                    <p class="card-text">Mua nhé.</p>
+                    <h5 class="card-title">@item.User.Username</h5>
+                    <p class="card-text">@item.Comment</p>
+                    <a href="#" class="card-link reply-link">Reply</a>
+                    <div class="reply-form" style="display: none;">
+                        <form class="reply-comment-form" method="POST">
+                            <input type="text" name="pId" value="@Model.Product.ProductId" hidden />
+                            <div class="mb-3">
+                                <label for="replyCommentInput" class="form-label">Reply: @item.User.Username</label>
+                                <input name="tId" value="@item.ReviewID" hidden />
+                                <textarea class="form-control" id="replyCommentInput" rows="1" placeholder="Your Reply" name="comment"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit Reply</button>
+                        </form>
+
+                    </div>
                 </div>
+                @foreach (var c in item.Comments)
+                {
+                    <div class="card ms-5 mb-3">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">@c.User.Username</h6>
+                            <p class="card-text">@c.Comment</p>
+                        </div>
+                    </div>
+                }
             </div>
-        </div>
-
-
-
+        }   
     </div>
 </div>
 

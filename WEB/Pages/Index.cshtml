@@ -112,7 +112,7 @@
                                     <div class="product-info">
                                         <a asp-page="ProductDetails" asp-route-id="@product.ProductId">
                                             <h2>@product.Name</h2>
-                                            <p>@product.Description</p>
+                                            <p>@(product.Description.Length > 30 ? product.Description.Substring(0, 30) : product.Description)....</p>
                                         </a>
                                         <span class="price">@DataAccess.ViewModel.FormatViewModel.GetFormatVND(@product.Price) VND</span>
                                     </div>

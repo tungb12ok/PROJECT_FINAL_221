@@ -40,6 +40,7 @@ namespace DataAccess.Models
 
                 optionsBuilder.UseSqlServer(ConnectionStr);
             }
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -102,8 +103,6 @@ namespace DataAccess.Models
             modelBuilder.Entity<Message>(entity =>
             {
                 entity.HasKey(e => e.MessId);
-
-                entity.HasIndex(e => e.ToUserId, "IDX_ToUserID");
 
                 entity.Property(e => e.MessId).HasColumnName("MessID");
 
@@ -170,7 +169,7 @@ namespace DataAccess.Models
             modelBuilder.Entity<ProductCategory>(entity =>
             {
                 entity.HasKey(e => e.CategoryId)
-                    .HasName("PK__ProductC__19093A2B6D3F9D9C");
+                    .HasName("PK__ProductC__19093A2B56C91AF7");
 
                 entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
 
@@ -189,7 +188,7 @@ namespace DataAccess.Models
             modelBuilder.Entity<ProductImage>(entity =>
             {
                 entity.HasKey(e => e.ImageId)
-                    .HasName("PK__ProductI__7516F4EC301E7CED");
+                    .HasName("PK__ProductI__7516F4EC4341A81A");
 
                 entity.Property(e => e.ImageId).HasColumnName("ImageID");
 
@@ -213,7 +212,7 @@ namespace DataAccess.Models
             modelBuilder.Entity<ProductReview>(entity =>
             {
                 entity.HasKey(e => e.ReviewId)
-                    .HasName("PK__ProductR__74BC79AE3C2DA481");
+                    .HasName("PK__ProductR__74BC79AE6D1AB213");
 
                 entity.Property(e => e.ReviewId).HasColumnName("ReviewID");
 
@@ -231,6 +230,11 @@ namespace DataAccess.Models
                     .WithMany(p => p.ProductReviews)
                     .HasForeignKey(d => d.ProductId)
                     .HasConstraintName("FK__ProductRe__Produ__5070F446");
+
+                entity.HasOne(d => d.Thread)
+                    .WithMany(p => p.InverseThread)
+                    .HasForeignKey(d => d.ThreadId)
+                    .HasConstraintName("FK_ProductReviews_ProductReviews");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.ProductReviews)
@@ -260,8 +264,6 @@ namespace DataAccess.Models
 
             modelBuilder.Entity<Transaction>(entity =>
             {
-                entity.HasIndex(e => e.TransactionDate, "IDX_TransactionDate");
-
                 entity.Property(e => e.TransactionId).HasColumnName("TransactionID");
 
                 entity.Property(e => e.Amount).HasColumnType("decimal(10, 2)");

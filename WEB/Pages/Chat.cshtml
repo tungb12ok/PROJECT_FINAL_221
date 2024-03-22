@@ -106,6 +106,7 @@
             var li = document.createElement("li");
             li.textContent = `${message.messageText}`;
             li.classList.add(message.fromUserId === @Model.UserCurrent.UserId ? "user-message" : "other-message");
+            li.setAttribute("data-userId", message.fromUserId); // Thêm userId vào thuộc tính data
             document.getElementById("messagesList").appendChild(li);
 
             // Cuộn xuống dưới cùng sau khi thêm tin nhắn mới

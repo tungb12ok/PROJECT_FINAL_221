@@ -5,14 +5,21 @@ namespace DataAccess.Models
 {
     public partial class ProductReview
     {
+        public ProductReview()
+        {
+            InverseThread = new HashSet<ProductReview>();
+        }
+
         public int ReviewId { get; set; }
         public int? ProductId { get; set; }
         public int? UserId { get; set; }
-        public int Rating { get; set; }
         public string? Comment { get; set; }
         public DateTime ReviewDate { get; set; }
+        public int? ThreadId { get; set; }
 
         public virtual Product? Product { get; set; }
+        public virtual ProductReview? Thread { get; set; }
         public virtual User? User { get; set; }
+        public virtual ICollection<ProductReview> InverseThread { get; set; }
     }
 }
