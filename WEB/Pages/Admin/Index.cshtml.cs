@@ -33,9 +33,23 @@ namespace WEB.Pages.Admin
         public IList<FinancialTransaction> FinancialTransaction { get; set; } = default!;
         public int TotalPages { get; set; }
 
-        public async Task OnGetAsync(string SelectedStatus)
+        public async Task<IActionResult> OnGetAsync(string SelectedStatus)
         {
-           StatusList = Enum.GetValues<TransactionStatus>()
+            User user = Extenstions.SessionExtensions.Get<User>(HttpContext.Session, "User");
+            if (user == null)
+            {
+               return Redirect("/SignIn");
+            }
+            else
+            {
+                if (user.RoldeId != 1)
+                {
+                    TempData["mess"] = "You must be admin!";
+                    return Redirect("/Index");
+                }
+            }
+
+            StatusList = Enum.GetValues<TransactionStatus>()
                            .Select(s => s.ToString())
                            .ToList();
 
@@ -69,6 +83,7 @@ namespace WEB.Pages.Admin
 
             ViewData["total"] = totalAmount.ToString();
             ViewData["totalSuccess"] = totalSuccess.ToString();
+            return Page();
 
         }
         public async Task OnGetFilterAsync()
