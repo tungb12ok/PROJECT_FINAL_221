@@ -28,6 +28,9 @@
             <a asp-page="/chat" asp-route-reciveceder="@Model.Product.UserId">
                 <button class="btn btn-primary">Chat</button>
             </a>
+            <a asp-page="CheckOut" asp-route-id="@Model.Product.ProductId">
+                <button class="buy-button btn btn-warning">Buy Now</button>
+            </a>
         </div>
     </div>
 </div>
