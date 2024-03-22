@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,11 @@ namespace WEB.Pages
         }
         public List<Favorite> Favorites { get; set; }
         public string Mess { get; set; }
-        public IActionResult OnGet()
+
+        public int PageNumber { get; set; } = 1;
+        public int TotalPages { get; set; }
+        const int pageSize = 2;
+        public IActionResult OnGet(int? pageNumber)
         {
             User u = Extenstions.SessionExtensions.Get<User>(HttpContext.Session, "User");
             if (u == null)
@@ -33,6 +38,13 @@ namespace WEB.Pages
                 TempData["mess"] = "my Favories null!";
                 return Redirect("/Index");
             }
+
+            PageNumber = pageNumber ?? 1;
+                        TotalPages = (int)Math.Ceiling(Favorites.Count / (double)pageSize);
+            Favorites = Favorites
+                .Skip((PageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
             return Page();
         }
         public IActionResult OnGetRemove(int id)

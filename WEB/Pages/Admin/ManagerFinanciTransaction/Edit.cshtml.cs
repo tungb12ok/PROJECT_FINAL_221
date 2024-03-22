@@ -7,13 +7,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
+using System.Transactions;
+using DataAccess.Enum;
 
 namespace WEB.Pages.Admin.ManagerFinanciTransaction
 {
     public class EditModel : PageModel
     {
         private readonly DataAccess.Models.QuickMarketContext _context;
-
+        public List<string> StatusList { get; set; }
         public EditModel(DataAccess.Models.QuickMarketContext context)
         {
             _context = context;
@@ -29,13 +31,19 @@ namespace WEB.Pages.Admin.ManagerFinanciTransaction
                 return NotFound();
             }
 
-            var financialtransaction =  await _context.FinancialTransactions.FirstOrDefaultAsync(m => m.TransactionId == id);
+            var financialtransaction =  await _context.FinancialTransactions.Include(x=>x.User).FirstOrDefaultAsync(m => m.TransactionId == id);
             if (financialtransaction == null)
             {
                 return NotFound();
             }
             FinancialTransaction = financialtransaction;
-           ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Email");
+
+
+            StatusList = Enum.GetValues<DataAccess.Enum.TransactionStatus>()
+                           .Select(s => s.ToString())
+                           .ToList();
+            ViewData["Status"] = StatusList;
+            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Email");
             return Page();
         }
 
