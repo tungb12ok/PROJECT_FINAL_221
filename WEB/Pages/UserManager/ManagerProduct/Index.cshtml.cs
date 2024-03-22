@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
+using DocumentFormat.OpenXml.Office2010.Excel;
 
 namespace WEB.Pages.UserManager.ManagerProduct
 {
@@ -18,16 +19,57 @@ namespace WEB.Pages.UserManager.ManagerProduct
             _context = context;
         }
 
-        public IList<Product> Product { get;set; } = default!;
+        public IList<Product> Product { get; set; } = default!;
+        [BindProperty]
 
-        public async Task OnGetAsync()
+        public string Mess { get; set; }
+        public async Task<IActionResult> OnGetAsync()
         {
-            if (_context.Products != null)
+            User user = Extenstions.SessionExtensions.Get<User>(HttpContext.Session, "User");
+            if (user == null)
+            {
+                return Redirect("/SignIn");
+            }
+
+            if (user.RoldeId != 1)
             {
                 Product = await _context.Products
-                .Include(p => p.Category)
-                .Include(p => p.Status).ToListAsync();
+                    .Include(p => p.Category)
+                    .Include(p => p.Status)
+                    .Where(p => p.UserId == user.UserId)
+                    .ToListAsync();
             }
+            else
+            {
+                Product = await _context.Products
+                    .Include(p => p.Category)
+                    .Include(p => p.Status)
+                    .ToListAsync();
+            }
+
+            return Page();
         }
+        public IActionResult OnGetUpdateStatus(int? id)
+        {
+            if (id == null || _context.Products == null)
+            {
+                return NotFound();
+            }
+
+            var product = _context.Products.FirstOrDefault(m => m.ProductId == id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                product.StatusId = 1;
+                _context.SaveChanges();
+            }
+            Mess = "Update Success";
+            return Redirect("/UserManager/ManagerProduct");
+        }
+
     }
 }

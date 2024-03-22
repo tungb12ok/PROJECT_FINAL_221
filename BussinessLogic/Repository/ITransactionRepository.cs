@@ -11,5 +11,7 @@ namespace BussinessLogic.Repository
     {
         public bool addTransaction(Transaction t);
         public bool updateTransaction(Transaction t);
+
+        public bool trasaction(Transaction t, Wallet w);
     }
 }

@@ -12,6 +12,7 @@ namespace BussinessLogic
         private QuickMarketContext context;
         private static TransactionDAO instance = null;
         private readonly static Object instanceLock = new Object();
+        WalletRepository wRepo = new WalletRepository();
         public TransactionDAO(QuickMarketContext dbContext)
         {
             context = dbContext;
@@ -67,6 +68,14 @@ namespace BussinessLogic
             {
                 return false;
             }
+        }
+
+        public bool trasaction(Transaction t, Wallet w)
+        {
+            bool flag = wRepo.topDownMoney((int)t.BuyerId, t.Amount);
+            flag = wRepo.topDownMoney((int)t.SellerId, t.Amount);
+
+            return flag;
         }
     }
 }

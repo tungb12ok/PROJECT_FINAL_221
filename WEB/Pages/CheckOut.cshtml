@@ -51,49 +51,86 @@
         <div class="col-md-12">
             <h3>Choose a Shipped Address</h3>
             <div class="row">
-                <div class="col-md-4">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="shippedAddress" id="address1" value="address1">
-                        <label class="form-check-label" for="address1">123 Main St., City Name, State Name, Country Name, Postal Code</label>
+                @foreach (var item in Model.UserShippeds)
+                {
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="shippedAddress" id="address1" value="address1">
+                            <label class="form-check-label" for="address1">@item.AddressLine1., @item.AddressLine2, @item.City, @item.Country, @item.PostalCode</label>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="shippedAddress" id="address2" value="address2">
-                        <label class="form-check-label" for="address2">456 Elm St., City Name, State Name, Country Name, Postal Code</label>
-                    </div>
-                </div>
+                }
             </div>
         </div>
     </div>
-
-
-
     <div class="row">
         <!-- Customer Info -->
         <div class="col-md-6">
-            <div class="info-card">
-                <h3>Customer Information</h3>
-                <p class="card-text"><strong>Customer Name:</strong> <input type="text" class="form-control" placeholder="Enter customer name"></p>
-                <p class="card-text"><strong>Address Line 1:</strong> <input type="text" class="form-control" placeholder="Enter address line 1"></p>
-                <p class="card-text"><strong>Address Line 2:</strong> <input type="text" class="form-control" placeholder="Enter address line 2"></p>
-                <p class="card-text"><strong>City:</strong> <input type="text" class="form-control" placeholder="Enter city"></p>
-                <p class="card-text"><strong>State:</strong> <input type="text" class="form-control" placeholder="Enter state"></p>
-                <p class="card-text"><strong>Country:</strong> <input type="text" class="form-control" placeholder="Enter country"></p>
-                <p class="card-text"><strong>Postal Code:</strong> <input type="text" class="form-control" placeholder="Enter postal code"></p>
-            </div>
-        </div>
+            <form method="post">
+                <input name="pId" value="@Model.Product.ProductId" hidden/>
+                <input name="uId" value="@Model.Product.UserId" hidden />
 
-        <!-- Product Info -->
-        <div class="col-md-6">
-            <div class="info-card">
-                <h3>Product Information</h3>
-                <p class="card-text"><strong>Product Name:</strong> <input type="text" class="form-control" placeholder="Enter product name"></p>
-                <p class="card-text"><strong>Description:</strong> <input type="text" class="form-control" placeholder="Enter description"></p>
-                <p class="card-text"><strong>Price:</strong> <input type="text" class="form-control" placeholder="Enter price"></p>
-                <p class="card-text"><strong>Stock Quantity:</strong> <input type="text" class="form-control" placeholder="Enter stock quantity"></p>
-                <p class="card-text"><strong>Date Added:</strong> <input type="text" class="form-control" placeholder="Enter date added"></p>
-            </div>
+                <input name="p" value="@Model.Product.Price" hidden />
+
+                <div class="info-card">
+                    <h3>Customer Information</h3>
+                    <p class="card-text"><strong>Customer Name:</strong> <input type="text" class="form-control" placeholder="Enter customer name" ></p>
+                    <p class="card-text"><strong>Address Line 1:</strong> <input asp-for="@Model.Shipped.AddressLine1" class="form-control" placeholder="Enter address line 1" required></p>
+                    <p class="card-text"><strong>Address Line 2:</strong> <input asp-for="@Model.Shipped.AddressLine2" class="form-control" placeholder="Enter address line 2" required></p>
+                    <p class="card-text"><strong>City:</strong> <input asp-for="@Model.Shipped.City" class="form-control" placeholder="Enter city" required></p>
+                    <p class="card-text"><strong>State:</strong> <input asp-for="@Model.Shipped.State" class="form-control" placeholder="Enter state" required></p>
+                    <p class="card-text"><strong>Country:</strong> <input asp-for="@Model.Shipped.Country" class="form-control" placeholder="Enter country" required></p>
+                    <p class="card-text"><strong>Postal Code:</strong> <input asp-for="@Model.Shipped.PostalCode" class="form-control" placeholder="Enter postal code" required></p>
+                    <button type="submit" class="btn btn-warning">Pay now</button>
+            </form>
         </div>
     </div>
+
+    <div class="col-md-6">
+        <div class="info-card">
+            <h3>Product Information</h3>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Product Name:</th>
+                        <td>@Model.Product.Name</td>
+                    </tr>
+                    <tr>
+                        <th>Images:</th>
+                        <td>
+                            <img src="@Model.Product.ProductImages.FirstOrDefault().ImageUrl" style="width: 30%; height:30%;" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Price:</th>
+                        <td>@DataAccess.ViewModel.FormatViewModel.GetFormatVND(Model.Product.Price) VND</td>
+                    </tr>
+                    <tr>
+                        <th>Saller:</th>
+                        <td>
+                            @Model.Product.User.Username
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Date Added:</th>
+                        <td><input type="text" class="form-control" placeholder="Enter date added" value="@DateTime.Now" readonly></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="2">Shipping Fee: 25.0000  VND</th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Platform Fee: 10,0000 VND</th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Total: @DataAccess.ViewModel.FormatViewModel.GetFormatVND(Model.Product.Price + 10000 + 25000) VND</th>
+                    </tr>
+                </tfoot>
+
+            </table>
+
+        </div>
+    </div>
+</div>
 </div>

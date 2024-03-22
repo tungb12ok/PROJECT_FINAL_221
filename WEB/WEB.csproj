@@ -7,9 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Pages\Manager\ManagerAccount\**" />
+    <Compile Remove="Pages\Manager\ManagerTransaction\**" />
     <Compile Remove="Pages\UserManager\MyTransaction\**" />
+    <Content Remove="Pages\Manager\ManagerAccount\**" />
+    <Content Remove="Pages\Manager\ManagerTransaction\**" />
     <Content Remove="Pages\UserManager\MyTransaction\**" />
+    <EmbeddedResource Remove="Pages\Manager\ManagerAccount\**" />
+    <EmbeddedResource Remove="Pages\Manager\ManagerTransaction\**" />
     <EmbeddedResource Remove="Pages\UserManager\MyTransaction\**" />
+    <None Remove="Pages\Manager\ManagerAccount\**" />
+    <None Remove="Pages\Manager\ManagerTransaction\**" />
     <None Remove="Pages\UserManager\MyTransaction\**" />
   </ItemGroup>
 
@@ -17,12 +25,6 @@
     <ProjectReference Include="..\BussinessLogic\BussinessLogic.csproj" />
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
     <ProjectReference Include="..\Exe\Exe.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Pages\Manager\ManagerTransaction\" />
-    <Folder Include="Pages\Manager\ManagerAccount\" />
-    <Folder Include="Pages\Manager\ManagerProduct\" />
   </ItemGroup>
 
 </Project>

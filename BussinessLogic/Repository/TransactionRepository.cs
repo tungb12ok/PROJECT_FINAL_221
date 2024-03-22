@@ -9,26 +9,11 @@ namespace BussinessLogic.Repository
 {
     public class TransactionRepository : ITransactionRepository
     {
-        public bool addFunds(Wallet wallet)
-        {
-            throw new NotImplementedException();
-        }
-
         public bool addTransaction(Transaction t)
         {
             throw new NotImplementedException();
         }
-
-        public bool minusFunds(Wallet wallet)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool updateFunds(Wallet wallet)
-        {
-            throw new NotImplementedException();
-        }
-
+        public bool trasaction(Transaction t, Wallet w) => TransactionDAO.Instance.trasaction(t, w);
         public bool updateTransaction(Transaction t)
         {
             throw new NotImplementedException();

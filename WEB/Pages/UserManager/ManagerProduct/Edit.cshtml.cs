@@ -21,23 +21,27 @@ namespace WEB.Pages.UserManager.ManagerProduct
 
         [BindProperty]
         public Product Product { get; set; } = default!;
-
+        [BindProperty]
+        public List<string> ImageUrls { get; set; } = new List<string>();
         public async Task<IActionResult> OnGetAsync(int? id)
         {
+            User U = Extenstions.SessionExtensions.Get<User>(HttpContext.Session, "User");
             if (id == null || _context.Products == null)
             {
                 return NotFound();
             }
 
-            var product =  await _context.Products.FirstOrDefaultAsync(m => m.ProductId == id);
+            var product = await _context.Products.FirstOrDefaultAsync(m => m.ProductId == id);
             if (product == null)
             {
                 return NotFound();
             }
             Product = product;
-           ViewData["CategoryId"] = new SelectList(_context.ProductCategories, "CategoryId", "CategoryName");
-           ViewData["StatusId"] = new SelectList(_context.Statuses, "StatusId", "StatusName");
-             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Username");
+            var Img = _context.ProductImages.Where(x => x.ProductId == id).ToList();
+            ViewData["img"] = Img;
+            ViewData["CategoryId"] = new SelectList(_context.ProductCategories, "CategoryId", "CategoryName");
+            ViewData["StatusId"] = new SelectList(_context.Statuses, "StatusId", "StatusName");
+            ViewData["UserId"] = U;
             return Page();
         }
 
@@ -74,7 +78,7 @@ namespace WEB.Pages.UserManager.ManagerProduct
 
         private bool ProductExists(int id)
         {
-          return (_context.Products?.Any(e => e.ProductId == id)).GetValueOrDefault();
+            return (_context.Products?.Any(e => e.ProductId == id)).GetValueOrDefault();
         }
     }
 }

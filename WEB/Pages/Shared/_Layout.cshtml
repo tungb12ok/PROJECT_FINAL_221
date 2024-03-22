@@ -26,11 +26,24 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                         </li>
+                        @if (currentUser != null)
+                        {
+                            @if (currentUser.RoldeId == 1 || currentUser.RoldeId == 2)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-page="/Admin/ManagerFinanciTransaction/Index">Manager Finacial Transaction</a>
+                                </li
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-page="/Admin/Index">Manager All Transaction</a>
+                                </li
+                                 <li class="nav-item">
+                                <a class="dropdown-item" asp-page="/Manager/Categories/Index">Manager Categories</a>
+                                </li>
+                            }
+                            
+                        }
                     </ul>
                     <ul class="nav-item ms-auto">
                         @if (currentUser == null)
@@ -42,7 +55,7 @@
                         @if (currentUser != null)
                         {
                             <div class="d-flex">
-                                <a class="nav-link  text-dark me-3" asp-page="chat" role="button">
+                                <a class="nav-link  text-dark me-3" asp-page="/chat" role="button">
                                     <img src="https://th.bing.com/th/id/OIP.zzacv_tYql9q7MGg_-qDtQHaHa?w=178&h=180&c=7&r=0&o=5&pid=1.7" style="width: 30px; height: 30px;" />
                                 </a>
                                 <div class="dropdown">
@@ -52,7 +65,7 @@
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                         <li><a class="dropdown-item" asp-area="" asp-page="/Profile">View Profile</a></li>
                                         <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/ManagerProduct/Index">Post Product</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/UserManager/ManagerProduct/Index">Post Product</a></li>
                                         <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item" asp-area="" asp-page="/UserManager/MyTransactions/Index">My Transaction</a></li>
                                         <li><hr class="dropdown-divider"></li>
