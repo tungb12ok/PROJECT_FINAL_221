@@ -126,7 +126,7 @@
                     <p class="text-muted mb-4">Seller: @Model.Product.User.Username</p>
                     <p>Description: @Model.Product.Description</p>
                     <div class="product-actions">
-                        <a asp-page="/chat" asp-route-reciveceder="@Model.Product.UserId" class="btn btn-primary mb-2">Chat</a>
+                        <a asp-page="/chat" asp-route-receiver="@Model.Product.UserId" class="btn btn-primary mb-2">Chat</a>
                         <a asp-page="CheckOut" asp-route-id="@Model.Product.ProductId" class="btn btn-warning mb-2">Buy Now</a>
                     </div>
                 </div>
