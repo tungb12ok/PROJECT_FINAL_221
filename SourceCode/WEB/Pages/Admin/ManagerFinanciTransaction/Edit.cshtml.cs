@@ -7,16 +7,16 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
-using System.Transactions;
 using DataAccess.Enum;
 
 namespace WEB.Pages.Admin.ManagerFinanciTransaction
 {
     public class EditModel : PageModel
     {
-        private readonly DataAccess.Models.QuickMarketContext _context;
+        private readonly QuickMarketContext _context;
+
         public List<string> StatusList { get; set; }
-        public EditModel(DataAccess.Models.QuickMarketContext context)
+        public EditModel(QuickMarketContext context)
         {
             _context = context;
         }
@@ -26,37 +26,44 @@ namespace WEB.Pages.Admin.ManagerFinanciTransaction
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.FinancialTransactions == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var financialtransaction =  await _context.FinancialTransactions.Include(x=>x.User).FirstOrDefaultAsync(m => m.TransactionId == id);
-            if (financialtransaction == null)
+            var financialTransaction = await _context.FinancialTransactions
+                .Include(x => x.User)
+                .FirstOrDefaultAsync(m => m.TransactionId == id);
+
+            if (financialTransaction == null)
             {
                 return NotFound();
             }
-            FinancialTransaction = financialtransaction;
 
-
-            StatusList = Enum.GetValues<DataAccess.Enum.TransactionStatus>()
-                           .Select(s => s.ToString())
-                           .ToList();
-            ViewData["Status"] = StatusList;
+            FinancialTransaction = financialTransaction;
+            StatusList = Enum.GetValues<TransactionStatus>().Select(s => s.ToString()).ToList();
+            ViewData["Status"] = new SelectList(StatusList);
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Email");
+
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+            var financialTransactionToUpdate = await _context.FinancialTransactions
+                .FirstOrDefaultAsync(e => e.TransactionId == FinancialTransaction.TransactionId);
+
+            if (financialTransactionToUpdate == null)
             {
-                return Page();
+                return NotFound();
             }
 
-            _context.Attach(FinancialTransaction).State = EntityState.Modified;
+            // Cập nhật các thuộc tính
+            financialTransactionToUpdate.Status = FinancialTransaction.Status;
+            financialTransactionToUpdate.TransactionType = FinancialTransaction.TransactionType;
+            financialTransactionToUpdate.Amount = FinancialTransaction.Amount;
+            financialTransactionToUpdate.TransactionDate = FinancialTransaction.TransactionDate;
+            financialTransactionToUpdate.Description = FinancialTransaction.Description;
 
             try
             {
@@ -74,12 +81,12 @@ namespace WEB.Pages.Admin.ManagerFinanciTransaction
                 }
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("/Admin/Index");
         }
 
         private bool FinancialTransactionExists(int id)
         {
-          return (_context.FinancialTransactions?.Any(e => e.TransactionId == id)).GetValueOrDefault();
+            return _context.FinancialTransactions.Any(e => e.TransactionId == id);
         }
     }
 }

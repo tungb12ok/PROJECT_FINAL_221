@@ -1,16 +1,16 @@
 ﻿@{
-var currentUser = SessionExtensions.Get<User>(Context.Session,"User");
+    var currentUser = SessionExtensions.Get<User>(Context.Session, "User");
 }
 
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - WEB</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/WEB.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/WEB.styles.css" asp-append-version="true"/>
 </head>
 <body>
 <header>
@@ -28,52 +28,74 @@ var currentUser = SessionExtensions.Get<User>(Context.Session,"User");
                     </li>
                     @if (currentUser != null)
                     {
-                    @if (currentUser.RoldeId == 1 || currentUser.RoldeId == 2)
-                    {
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-page="/Admin/ManagerFinanciTransaction/Index">Manager Finacial Transaction</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-page="/Admin/Index">Manager All Transaction</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-page="/Manager/Categories/Index">Manager Categories</a>
-                    </li>
-                    }
+                        @if (currentUser.RoldeId == 1 || currentUser.RoldeId == 2)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-page="/Admin/ManagerFinanciTransaction/Index">Manager Finacial Transaction</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-page="/Admin/Index">Manager All Transaction</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-page="/Manager/Categories/Index">Manager Categories</a>
+                            </li>
+                        }
                     }
                 </ul>
                 <ul class="nav-item ms-auto">
                     @if (currentUser == null)
                     {
-                    <a class="dropdown-item" asp-area="" asp-page="/SignIn">Login</a>
+                        <a class="dropdown-item" asp-area="" asp-page="/SignIn">Login</a>
                     }
                 </ul>
                 <ul class="nav-item dropdown ms-auto">
                     @if (currentUser != null)
                     {
-                    <div class="d-flex">
-                        <a class="nav-link text-dark me-3" asp-page="/chat" role="button">
-                            <img src="https://th.bing.com/th/id/OIP.zzacv_tYql9q7MGg_-qDtQHaHa?w=178&h=180&c=7&r=0&o=5&pid=1.7" style="width: 30px; height: 30px;" />
-                        </a>
-                        <div class="dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="đường_dẫn_đến_avatar" alt="Hello, @currentUser.Username" style="width: 30px; height: 30px; border-radius: 50%;" />
+                        <div class="d-flex">
+                            <a class="nav-link text-dark me-3" asp-page="/chat" role="button">
+                                <img src="https://th.bing.com/th/id/OIP.zzacv_tYql9q7MGg_-qDtQHaHa?w=178&h=180&c=7&r=0&o=5&pid=1.7" style="width: 30px; height: 30px;"/>
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" asp-area="" asp-page="/Profile">View Profile</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-area="" asp-page="/UserManager/ManagerProduct/Index">Post Product</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-area="" asp-page="/UserManager/MyTransactions/Index">My Transaction</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-area="" asp-page="/UserManager/MyWallet">My Wallet</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-area="" asp-page="/MyFavorites">My Favourites</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-area="" asp-page="/SignOut">Logout</a></li>
-                            </ul>
+                            <div class="dropdown">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="đường_dẫn_đến_avatar" alt="Hello, @currentUser.Username" style="width: 30px; height: 30px; border-radius: 50%;"/>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-page="/Profile">View Profile</a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-page="/Manager/ManagerProduct/Index">Post Product</a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-page="/Manager/MyTransactions/Index">My Transaction</a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-page="/UserManager/MyWallet">My Wallet</a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-page="/MyFavorites">My Favourites</a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-page="/SignOut">Logout</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
                     }
                 </ul>
             </div>

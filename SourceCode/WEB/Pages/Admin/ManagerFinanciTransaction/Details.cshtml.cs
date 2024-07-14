@@ -27,7 +27,9 @@ namespace WEB.Pages.Admin.ManagerFinanciTransaction
                 return NotFound();
             }
 
-            var financialtransaction = await _context.FinancialTransactions.FirstOrDefaultAsync(m => m.TransactionId == id);
+            var financialtransaction = await _context.FinancialTransactions
+                .Include(x => x.User)
+                .FirstOrDefaultAsync(m => m.TransactionId == id);
             if (financialtransaction == null)
             {
                 return NotFound();
