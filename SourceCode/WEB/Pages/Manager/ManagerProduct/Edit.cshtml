@@ -2,7 +2,7 @@
 @model WEB.Pages.UserManager.ManagerProduct.EditModel
 
 @{
-    ViewData["Title"] = "Edit";
+ViewData["Title"] = "Edit";
 }
 
 <h1>Edit</h1>
@@ -40,7 +40,7 @@
                 <input asp-for="Product.Price" class="form-control" />
                 <span asp-validation-for="Product.Price" class="text-danger"></span>
             </div>
-            
+
             <div class="form-group">
                 <label asp-for="Product.StatusId" class="control-label"></label>
                 <select asp-for="Product.StatusId" class="form-control" asp-items="ViewBag.StatusId"></select>
@@ -50,10 +50,12 @@
             <div class="form-group">
                 <label class="control-label">Image URLs</label>
                 <div id="imageUrls">
-                    @foreach (var imageUrl in ViewBag.img)
+                    @for (int i = 0; i < Model.ImageUrls.Count; i++)
                     {
-                        <input type="text" asp-for="ImageUrls" value="@imageUrl.ImageUrl" class="form-control mb-2" />
-                        <img src="@imageUrl.ImageUrl" style="width: 30%; height: 30%;" />
+                    <div class="mb-2">
+                        <input type="text" name="ImageUrls[@i]" value="@Model.ImageUrls[i]" class="form-control mb-2" />
+                        <img src="@Model.ImageUrls[i]" style="width: 30%; height: 30%;" />
+                    </div>
                     }
                 </div>
                 <button type="button" class="btn btn-primary" onclick="addImageUrl()">Add Image URL</button>
@@ -71,14 +73,17 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 <script>
     function addImageUrl() {
+        var div = document.createElement('div');
+        div.className = 'mb-2';
         var input = document.createElement('input');
         input.type = 'text';
-        input.name = 'Product.ImageUrls[]';
+        input.name = 'ImageUrls';
         input.className = 'form-control mb-2';
-        document.getElementById('imageUrls').appendChild(input);
+        div.appendChild(input);
+        document.getElementById('imageUrls').appendChild(div);
     }
 </script>

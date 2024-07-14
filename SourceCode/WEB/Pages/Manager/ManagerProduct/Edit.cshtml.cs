@@ -12,50 +12,69 @@ namespace WEB.Pages.UserManager.ManagerProduct
 {
     public class EditModel : PageModel
     {
-        private readonly DataAccess.Models.QuickMarketContext _context;
+        private readonly QuickMarketContext _context;
 
-        public EditModel(DataAccess.Models.QuickMarketContext context)
+        public EditModel(QuickMarketContext context)
         {
             _context = context;
         }
 
         [BindProperty]
         public Product Product { get; set; } = default!;
+
         [BindProperty]
         public List<string> ImageUrls { get; set; } = new List<string>();
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            User U = Extenstions.SessionExtensions.Get<User>(HttpContext.Session, "User");
+            User U = WEB.Extenstions.SessionExtensions.Get<User>(HttpContext.Session, "User");
             if (id == null || _context.Products == null)
             {
                 return NotFound();
             }
 
-            var product = await _context.Products.FirstOrDefaultAsync(m => m.ProductId == id);
+            var product = await _context.Products
+                                        .Include(p => p.ProductImages)
+                                        .FirstOrDefaultAsync(m => m.ProductId == id);
+
             if (product == null)
             {
                 return NotFound();
             }
+
             Product = product;
-            var Img = _context.ProductImages.Where(x => x.ProductId == id).ToList();
-            ViewData["img"] = Img;
+            ImageUrls = product.ProductImages.Select(x => x.ImageUrl).ToList();
+
             ViewData["CategoryId"] = new SelectList(_context.ProductCategories, "CategoryId", "CategoryName");
             ViewData["StatusId"] = new SelectList(_context.Statuses, "StatusId", "StatusName");
             ViewData["UserId"] = U;
+
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
+            var productToUpdate = await _context.Products
+                                                .Include(p => p.ProductImages)
+                                                .FirstOrDefaultAsync(p => p.ProductId == Product.ProductId);
 
-            if (!ModelState.IsValid)
+            if (productToUpdate == null)
             {
-                return Page();
+                return NotFound();
             }
 
-            _context.Attach(Product).State = EntityState.Modified;
+            productToUpdate.Name = Product.Name;
+            productToUpdate.Description = Product.Description;
+            productToUpdate.Price = Product.Price;
+            productToUpdate.CategoryId = Product.CategoryId;
+            productToUpdate.StatusId = Product.StatusId;
+
+            // Cập nhật các URL hình ảnh
+            productToUpdate.ProductImages.Clear();
+            foreach (var imageUrl in ImageUrls)
+            {
+                productToUpdate.ProductImages.Add(new ProductImage { ImageUrl = imageUrl });
+            }
 
             try
             {
@@ -78,7 +97,7 @@ namespace WEB.Pages.UserManager.ManagerProduct
 
         private bool ProductExists(int id)
         {
-            return (_context.Products?.Any(e => e.ProductId == id)).GetValueOrDefault();
+            return _context.Products.Any(e => e.ProductId == id);
         }
     }
 }

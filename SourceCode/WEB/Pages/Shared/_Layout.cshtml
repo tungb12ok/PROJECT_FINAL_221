@@ -31,6 +31,18 @@
                         @if (currentUser.RoldeId == 1 || currentUser.RoldeId == 2)
                         {
                             <li class="nav-item">
+                                <a class="nav-link text-dark" asp-page="/Manager/ManagerProduct/Index">Manager Product</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-page="/Manager/Categories/Index">Manager Categories</a>
+                            </li>
+                        }
+                        @if (currentUser.RoldeId == 1)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-page="/Manager/ManagerProduct/Index">Manager Product</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-page="/Admin/ManagerFinanciTransaction/Index">Manager Finacial Transaction</a>
                             </li>
                             <li class="nav-item">
