@@ -27,4 +27,18 @@
     <ProjectReference Include="..\Exe\Exe.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\UserManager\ManagerProduct\Create.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\UserManager\ManagerProduct\Delete.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\UserManager\ManagerProduct\Edit.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\UserManager\ManagerProduct\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="Pages\Manager\ManagerProduct\Create.cshtml" />
+    <AdditionalFiles Include="Pages\Manager\ManagerProduct\Delete.cshtml" />
+    <AdditionalFiles Include="Pages\Manager\ManagerProduct\Edit.cshtml" />
+    <AdditionalFiles Include="Pages\Manager\ManagerProduct\Index.cshtml" />
+  </ItemGroup>
+
 </Project>

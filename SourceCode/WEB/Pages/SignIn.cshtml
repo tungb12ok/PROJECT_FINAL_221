@@ -1,7 +1,6 @@
 ﻿@page 
 @model WEB.Pages.SignInModel
-@{
-}
+
 
 <form method="post" class="container mt-4">
     <h2>Sing In</h2>
@@ -15,7 +14,6 @@
         <input type="password" class="form-control" asp-for="User.PasswordHash">
         <span asp-validation-for="User.PasswordHash" class="text-danger"></span>
     </div>
-    </br>
     <p class="text-danger bg-danger bg-opacity-10">@Model.Mess</p>
 
     <button type="submit" class="btn btn-primary">SignIn</button>

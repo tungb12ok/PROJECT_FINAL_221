@@ -19,7 +19,7 @@ namespace WEB.Pages
         [BindProperty]
         public User UserCurrent { get; set; }
         public User UserTo { get; set; } = null;
-        public IActionResult OnGet(int reciveceder)
+        public IActionResult OnGet(int receiver)
         {
             UserCurrent = Extenstions.SessionExtensions.Get<User>(HttpContext.Session, "User");
 
@@ -29,9 +29,10 @@ namespace WEB.Pages
             }
             else
             {
-                if (reciveceder != null)
+                if (receiver != null)
                 {
-                    Messages = _context.Messages.Where(x => (x.ToUserId == reciveceder && x.FromUserId == UserCurrent.UserId) || (x.ToUserId == UserCurrent.UserId && x.FromUserId == reciveceder))
+                    Messages = _context.Messages.Where(x => (x.ToUserId == receiver && x.FromUserId == UserCurrent.UserId) 
+                                                            || (x.ToUserId == UserCurrent.UserId && x.FromUserId == receiver))
                     .Include(x => x.FromUser)
                     .Include(x => x.ToUser)
                     .ToList();
@@ -48,7 +49,7 @@ namespace WEB.Pages
                                 .ToList();
 
                     ViewData["listView"] = list;
-                    UserTo = _context.Users.FirstOrDefault(x => x.UserId == reciveceder);
+                    UserTo = _context.Users.FirstOrDefault(x => x.UserId == receiver);
                     if (UserTo == null)
                     {
                         ViewData["flag"] = 0;

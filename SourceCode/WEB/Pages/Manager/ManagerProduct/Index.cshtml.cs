@@ -68,7 +68,7 @@ namespace WEB.Pages.UserManager.ManagerProduct
                 _context.SaveChanges();
             }
             Mess = "Update Success";
-            return Redirect("/UserManager/ManagerProduct");
+            return Redirect("/Manager/ManagerProduct");
         }
 
     }

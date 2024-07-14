@@ -1,5 +1,6 @@
 ﻿using DataAccess.Models;
 using Microsoft.AspNetCore.SignalR;
+using WEB.Extenstions;
 
 namespace WEB.Hubs
 {
@@ -7,16 +8,28 @@ namespace WEB.Hubs
     {
         private readonly QuickMarketContext _context = new QuickMarketContext();
 
-        //public async Task SendMessage(string user, string message)
-        //{
-        //    await Clients.All.SendAsync("ReceiveMessage", user, message);
-        //}
         public async Task SendMessage(Message message)
         {
             _context.Messages.Add(message);
             _context.SaveChanges();
-            // Xử lý tin nhắn ở đây
-            await Clients.All.SendAsync("ReceiveMessage", message);
+
+            var sender = "user" + message.FromUserId;
+            var receiver = "user" + message.ToUserId;
+
+            string group = Helper.roomConnect(sender, receiver);
+
+            // Send the message to the specific group
+            await Clients.Group(group).SendAsync("ReceiveMessage", message);
+        }
+
+        public async Task JoinGroup(string groupName)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+        }
+
+        public async Task LeaveGroup(string groupName)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
         }
     }
 }

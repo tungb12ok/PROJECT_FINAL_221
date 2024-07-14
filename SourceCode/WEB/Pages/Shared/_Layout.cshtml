@@ -1,11 +1,9 @@
-﻿
-@{
-    var currentUser = SessionExtensions.Get<User>(Context.Session,"User");
+﻿@{
+var currentUser = SessionExtensions.Get<User>(Context.Session,"User");
 }
 
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,93 +13,90 @@
     <link rel="stylesheet" href="~/WEB.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">WEB</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
-                        @if (currentUser != null)
-                        {
-                            @if (currentUser.RoldeId == 1 || currentUser.RoldeId == 2)
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-page="/Admin/ManagerFinanciTransaction/Index">Manager Finacial Transaction</a>
-                                </li
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-page="/Admin/Index">Manager All Transaction</a>
-                                </li
-                                 <li class="nav-item">
-                                <a class="dropdown-item" asp-page="/Manager/Categories/Index">Manager Categories</a>
-                                </li>
-                            }
-                            
-                        }
-                    </ul>
-                    <ul class="nav-item ms-auto">
-                        @if (currentUser == null)
-                        {
-                            <a class="dropdown-item" asp-area="" asp-page="/SignIn">Login</a>
-                        }
-                    </ul>
-                    <ul class="nav-item dropdown ms-auto">
-                        @if (currentUser != null)
-                        {
-                            <div class="d-flex">
-                                <a class="nav-link  text-dark me-3" asp-page="/chat" role="button">
-                                    <img src="https://th.bing.com/th/id/OIP.zzacv_tYql9q7MGg_-qDtQHaHa?w=178&h=180&c=7&r=0&o=5&pid=1.7" style="width: 30px; height: 30px;" />
-                                </a>
-                                <div class="dropdown">
-                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <img src="đường_dẫn_đến_avatar" alt="Hello, @currentUser.Username" style="width: 30px; height: 30px; border-radius: 50%;" />
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/Profile">View Profile</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/UserManager/ManagerProduct/Index">Post Product</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/UserManager/MyTransactions/Index">My Transaction</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/UserManager/MyWallet">My Wallet</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/MyFavorites">My Favourites</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/SignOut">Logout</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                        }
-                    </ul>
-
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container">
-            &copy; 2024 - WEB - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            <a class="navbar-brand" asp-area="" asp-page="/Index">WEB</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                    </li>
+                    @if (currentUser != null)
+                    {
+                    @if (currentUser.RoldeId == 1 || currentUser.RoldeId == 2)
+                    {
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-page="/Admin/ManagerFinanciTransaction/Index">Manager Finacial Transaction</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-page="/Admin/Index">Manager All Transaction</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-page="/Manager/Categories/Index">Manager Categories</a>
+                    </li>
+                    }
+                    }
+                </ul>
+                <ul class="nav-item ms-auto">
+                    @if (currentUser == null)
+                    {
+                    <a class="dropdown-item" asp-area="" asp-page="/SignIn">Login</a>
+                    }
+                </ul>
+                <ul class="nav-item dropdown ms-auto">
+                    @if (currentUser != null)
+                    {
+                    <div class="d-flex">
+                        <a class="nav-link text-dark me-3" asp-page="/chat" role="button">
+                            <img src="https://th.bing.com/th/id/OIP.zzacv_tYql9q7MGg_-qDtQHaHa?w=178&h=180&c=7&r=0&o=5&pid=1.7" style="width: 30px; height: 30px;" />
+                        </a>
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="đường_dẫn_đến_avatar" alt="Hello, @currentUser.Username" style="width: 30px; height: 30px; border-radius: 50%;" />
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" asp-area="" asp-page="/Profile">View Profile</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" asp-area="" asp-page="/UserManager/ManagerProduct/Index">Post Product</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" asp-area="" asp-page="/UserManager/MyTransactions/Index">My Transaction</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" asp-area="" asp-page="/UserManager/MyWallet">My Wallet</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" asp-area="" asp-page="/MyFavorites">My Favourites</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" asp-area="" asp-page="/SignOut">Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    }
+                </ul>
+            </div>
         </div>
-    </footer>
+    </nav>
+</header>
+<div class="container">
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+</div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<footer class="border-top footer text-muted">
+    <div class="container">
+        &copy; 2024 - WEB - <a asp-area="" asp-page="/Privacy">Privacy</a>
+    </div>
+</footer>
 
-    @await RenderSectionAsync("Scripts", required: false)
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -2,14 +2,114 @@
 @model WEB.Pages.ProductDetailsModel
 @{
 }
-<div class="container mt-5">
-    <div class="row">
-        <!-- Left Column - Product Images -->
-        <div class="col-md-6">
-            <div class="mb-3">
-                <img src="@Model.Product.ProductImages.FirstOrDefault().ImageUrl" class="img-fluid mb-2" alt="Product Image">
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .product-images img {
+            max-height: 400px;
+            width: auto;
+            border: 1px solid #ddd;
+            padding: 5px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .additional-images img {
+            cursor: pointer;
+        }
+
+        .additional-images img:hover {
+            border: 2px solid #007bff;
+        }
+
+        .comments-section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .comment-form textarea,
+        .reply-comment-form textarea {
+            resize: none;
+        }
+
+        .reply-comment-form {
+            margin-top: 10px;
+        }
+
+        .reply-form {
+            margin-top: 10px;
+        }
+
+        .reply-link {
+            cursor: pointer;
+            color: #007bff;
+        }
+
+        .reply-link:hover {
+            text-decoration: underline;
+        }
+
+        .product-info h2 {
+            font-size: 2rem;
+            color: #333;
+        }
+
+        .product-info p {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .btn-primary,
+        .btn-warning {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .product-actions .btn {
+            border-radius: 25px;
+        }
+
+        .comments-section h1 {
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        .comment-form,
+        .reply-comment-form {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+
+        .comment-form .btn,
+        .reply-comment-form .btn {
+            border-radius: 25px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Left Column - Product Images -->
+            <div class="col-md-6 product-images">
+                <img src="@Model.Product.ProductImages.FirstOrDefault()?.ImageUrl" class="img-fluid mb-2" alt="Product Image">
                 <!-- Additional Product Images -->
-                <div class="row">
+                <div class="row additional-images">
                     @foreach (var item in Model.Images)
                     {
                         <div class="col-4">
@@ -18,80 +118,83 @@
                     }
                 </div>
             </div>
-        </div>
 
-        <!-- Right Column - Product Description -->
-        <div class="col-md-6">
-            <h2 class="mb-4">@Model.Product.Name</h2>
-            <p class="text-muted mb-4">Seller: @Model.Product.User.Username</p>
-            <p>Description: @Model.Product.Description .</p>
-            <a asp-page="/chat" asp-route-reciveceder="@Model.Product.UserId">
-                <button class="btn btn-primary">Chat</button>
-            </a>
-            <a asp-page="CheckOut" asp-route-id="@Model.Product.ProductId">
-                <button class="buy-button btn btn-warning">Buy Now</button>
-            </a>
-        </div>
-    </div>
-</div>
-<div class="container mt-5">
-    <h1 class="mb-4">Comments</h1>
-
-    <!-- Form for adding new comment -->
-    <form id="commentForm" method="post">
-        <input type="text" name="pId" value="@Model.Product.ProductId" hidden />
-        <div class="mb-3">
-            <label for="commentInput" class="form-label">Comment</label>
-            <textarea class="form-control" id="commentInput" rows="3" placeholder="Your Comment" name="comment"></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-
-    <hr>
-
-    <div id="comments">
-
-        @foreach (var item in Model.ListComment)
-        {
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">@item.User.Username</h5>
-                    <p class="card-text">@item.Comment</p>
-                    <a href="#" class="card-link reply-link">Reply</a>
-                    <div class="reply-form" style="display: none;">
-                        <form class="reply-comment-form" method="POST">
-                            <input type="text" name="pId" value="@Model.Product.ProductId" hidden />
-                            <div class="mb-3">
-                                <label for="replyCommentInput" class="form-label">Reply: @item.User.Username</label>
-                                <input name="tId" value="@item.ReviewID" hidden />
-                                <textarea class="form-control" id="replyCommentInput" rows="1" placeholder="Your Reply" name="comment"></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Submit Reply</button>
-                        </form>
-
+            <!-- Right Column - Product Description -->
+            <div class="col-md-6">
+                <div class="product-info">
+                    <h2 class="mb-4">@Model.Product.Name</h2>
+                    <p class="text-muted mb-4">Seller: @Model.Product.User.Username</p>
+                    <p>Description: @Model.Product.Description</p>
+                    <div class="product-actions">
+                        <a asp-page="/chat" asp-route-reciveceder="@Model.Product.UserId" class="btn btn-primary mb-2">Chat</a>
+                        <a asp-page="CheckOut" asp-route-id="@Model.Product.ProductId" class="btn btn-warning mb-2">Buy Now</a>
                     </div>
                 </div>
-                @foreach (var c in item.Comments)
-                {
-                    <div class="card ms-5 mb-3">
-                        <div class="card-body">
-                            <h6 class="card-subtitle mb-2 text-muted">@c.User.Username</h6>
-                            <p class="card-text">@c.Comment</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5 comments-section">
+        <h1 class="mb-4">Comments</h1>
+
+        <!-- Form for adding new comment -->
+        <form id="commentForm" method="post" class="comment-form">
+            <input type="text" name="pId" value="@Model.Product.ProductId" hidden />
+            <div class="mb-3">
+                <label for="commentInput" class="form-label">Comment</label>
+                <textarea class="form-control" id="commentInput" rows="3" placeholder="Your Comment" name="comment"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <hr>
+
+        <div id="comments">
+            @foreach (var item in Model.ListComment)
+            {
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.User.Username</h5>
+                        <p class="card-text">@item.Comment</p>
+                        <span class="reply-link">Reply</span>
+                        <div class="reply-form" style="display: none;">
+                            <form class="reply-comment-form" method="POST">
+                                <input type="text" name="pId" value="@Model.Product.ProductId" hidden />
+                                <div class="mb-3">
+                                    <label for="replyCommentInput" class="form-label">Reply: @item.User.Username</label>
+                                    <input name="tId" value="@item.ReviewID" hidden />
+                                    <textarea class="form-control" id="replyCommentInput" rows="1" placeholder="Your Reply" name="comment"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Submit Reply</button>
+                            </form>
                         </div>
                     </div>
-                }
-            </div>
-        }   
+                    @foreach (var c in item.Comments)
+                    {
+                        <div class="card ms-5 mb-3">
+                            <div class="card-body">
+                                <h6 class="card-subtitle mb-2 text-muted">@c.User.Username</h6>
+                                <p class="card-text">@c.Comment</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
     </div>
-</div>
 
-<script>
-    // Event listener for showing reply form
-    document.querySelectorAll('.reply-link').forEach(function (link) {
-        link.addEventListener('click', function (event) {
-            event.preventDefault();
-            var replyForm = this.nextElementSibling;
-            replyForm.style.display = (replyForm.style.display === 'none' || replyForm.style.display === '') ? 'block' : 'none';
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Event listener for showing reply form
+        document.querySelectorAll('.reply-link').forEach(function (link) {
+            link.addEventListener('click', function (event) {
+                event.preventDefault();
+                var replyForm = this.nextElementSibling;
+                replyForm.style.display = (replyForm.style.display === 'none' || replyForm.style.display === '') ? 'block' : 'none';
+            });
         });
-    });
-</script>
+    </script>
+</body>
+
+</html>

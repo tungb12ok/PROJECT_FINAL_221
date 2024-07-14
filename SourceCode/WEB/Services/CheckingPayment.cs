@@ -12,8 +12,8 @@ namespace WEB.Services
 {
     public class CheckingPayment
     {
-        static string username = "0972074620";
-        static string password = "Tungld123@123";
+        private static string username = "0972074620";
+        private static string password = "Tungld123@123";
         private static string AccessToken { get; set; } = string.Empty;
         public static async void SystemCheckingBanking()
         {

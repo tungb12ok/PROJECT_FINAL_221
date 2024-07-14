@@ -1,140 +1,201 @@
 ﻿@page
 @model WEB.Pages.ChatModel
+@{
+ViewData["Title"] = "Chat";
+}
+
 <style>
-    .message-container {
-        padding: 0;
-        margin: 0;
-        list-style-type: none;
-        overflow-y: auto; /* Bật cuộn dọc khi nội dung vượt quá kích thước */
-        max-height: 300px; /* Đặt chiều cao tối đa cho khung cuộn */
+    .chat-app {
+        display: flex;
+        height: 100vh;
+        background-color: #f1f2f6;
     }
 
-        .message-container li {
-            margin-bottom: 10px;
-            word-wrap: break-word;
-            padding: 10px;
-            border-radius: 10px;
-        }
+    .chat-sidebar {
+        width: 300px;
+        background-color: #fff;
+        border-right: 1px solid #ddd;
+        overflow-y: auto;
+    }
 
-    .user-message {
+    .chat-main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-header {
+        padding: 15px;
         background-color: #007bff;
         color: #fff;
-        align-self: flex-end;
+        display: flex;
+        align-items: center;
     }
 
-    .other-message {
-        background-color: #f8f9fa;
+    .chat-messages {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-message {
+        margin-bottom: 15px;
+        display: flex;
+    }
+
+    .chat-message.user {
+        justify-content: flex-end;
+    }
+
+    .chat-message.other {
+        justify-content: flex-start;
+    }
+
+    .chat-bubble {
+        max-width: 60%;
+        padding: 10px;
+        border-radius: 20px;
+        position: relative;
+        display: inline-block;
+    }
+
+    .chat-bubble.user {
+        background-color: #007bff;
+        color: #fff;
+        text-align: right;
+    }
+
+    .chat-bubble.other {
+        background-color: #e9ecef;
         color: #000;
-        align-self: flex-start;
+        text-align: left;
+    }
+
+    .chat-input {
+        padding: 15px;
+        background-color: #fff;
+        border-top: 1px solid #ddd;
+        display: flex;
+        align-items: center;
+    }
+
+    .chat-input input {
+        flex: 1;
+        padding: 10px;
+        border-radius: 20px;
+        border: 1px solid #ddd;
+        margin-right: 10px;
+    }
+
+    .chat-input button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
     }
 </style>
-<div class="container">
-    <div class="row mt-3">
-        <div class="col-3">
-            <h2 class="text-center">Chat Application</h2>
-            <ul id="userList" class="list-group">
-                @foreach (var user in ViewBag.listView)
-                {
-                    <form method="get">
-                    <input name="reciveceder" value="@user.UserTo.UserId"  hidden/>
-                        <button class="btn btn-success">Chat @user.UserTo.Username</button>
-                    </form>
-                    <hr />
-                }
-            </ul>
+
+<div class="chat-app">
+    <div class="chat-sidebar">
+        <h2 class="text-center p-3">Chat Application</h2>
+        <ul id="userList" class="list-group">
+            @foreach (var user in ViewBag.listView)
+            {
+            <form method="get">
+                <input name="receiver" value="@user.UserTo.UserId" hidden />
+                <button class="btn btn-light w-100 text-left">@user.UserTo.Username</button>
+            </form>
+            }
+        </ul>
+    </div>
+    @if (ViewBag.flag != 0)
+    {
+    <div class="chat-main">
+        <div class="chat-header">
+            Chat with @Model.UserTo.Username
         </div>
-        @if (ViewBag.flag != 0)
-        {
-            <div class="col-9">
-                <div class="row mt-3">
-                    <div class="col-md-6 offset-md-3">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">User</span>
-                            <input type="text" class="form-control" id="userInput" value="@Model.UserCurrent.Username" readonly />
-                            <span class="input-group-text">To:...</span>
-                            <input type="text" class="form-control" id="userInput" value="@Model.UserTo.Username" readonly />
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 offset-md-3">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Message</span>
-                            <input type="text" class="form-control" id="messageInput" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 offset-md-3">
-                        <button class="btn btn-primary" id="sendButton">Send Message</button>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-6 offset-md-3">
-                        <hr />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 offset-md-3">
-                        <ul id="messagesList" class="message-container">
-                            @foreach (var message in Model.Messages)
-                            {
-                                var classUser = message.FromUserId == Model.UserCurrent.UserId ? "user-message" : "other-message";
-                                <li class="@classUser">@message.FromUser.Username: @message.MessageText - @message.SentTime</li>
-                            }
-                        </ul>
-                    </div>
+        <div id="messagesList" class="chat-messages">
+            @foreach (var message in Model.Messages)
+            {
+            var messageClass = message.FromUserId == Model.UserCurrent.UserId ? "user" : "other";
+            <div class="chat-message @messageClass">
+                <div class="chat-bubble @messageClass">
+                    @message.MessageText
                 </div>
             </div>
-        }
+            }
+        </div>
+        <div class="chat-input">
+            <input type="text" id="messageInput" placeholder="Type a message..." />
+            <button id="sendButton">Send</button>
+        </div>
     </div>
+    }
 </div>
 
-
-<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.7/signalr.min.js"></script>
 @if (Model.UserTo != null)
 {
-    <script>
-        "use strict";
+<script>
+    "use strict";
 
-        var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+    var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 
-        //Disable the send button until connection is established.
-        document.getElementById("sendButton").disabled = true;
+    document.getElementById("sendButton").disabled = true;
 
-        connection.on("ReceiveMessage", function (message) {
-            var li = document.createElement("li");
-            li.textContent = `${message.messageText}`;
-            li.classList.add(message.fromUserId === @Model.UserCurrent.UserId ? "user-message" : "other-message");
-            li.setAttribute("data-userId", message.fromUserId); // Thêm userId vào thuộc tính data
-            document.getElementById("messagesList").appendChild(li);
+    connection.on("ReceiveMessage", function (message) {
+        var li = document.createElement("div");
+        var bubble = document.createElement("div");
+        bubble.textContent = message.messageText;
+        bubble.classList.add("chat-bubble");
+        li.classList.add("chat-message");
+        if (message.fromUserId == @Model.UserCurrent.UserId) {
+            li.classList.add("user");
+            bubble.classList.add("user");
+        } else {
+            li.classList.add("other");
+            bubble.classList.add("other");
+        }
+        li.appendChild(bubble);
+        document.getElementById("messagesList").appendChild(li);
 
-            // Cuộn xuống dưới cùng sau khi thêm tin nhắn mới
-            var messageContainer = document.getElementById("messagesList");
-            messageContainer.scrollTop = messageContainer.scrollHeight;
+        var messageContainer = document.getElementById("messagesList");
+        messageContainer.scrollTop = messageContainer.scrollHeight;
+    });
+
+    connection.start().then(function () {
+        document.getElementById("sendButton").disabled = false;
+
+        var userId = @Model.UserCurrent.UserId;
+        var receiverId = @Model.UserTo.UserId;
+        var group = userId < receiverId ? `user${userId}-user${receiverId}` : `user${receiverId}-user${userId}`;
+        connection.invoke("JoinGroup", group).catch(function (err) {
+            return console.error(err.toString());
         });
+    }).catch(function (err) {
+        return console.error(err.toString());
+    });
 
-        connection.start().then(function () {
-            document.getElementById("sendButton").disabled = false;
-        }).catch(function (err) {
+    document.getElementById("sendButton").addEventListener("click", function (event) {
+        var messageText = document.getElementById("messageInput").value;
+
+        var message = {
+            fromUserId: @Model.UserCurrent.UserId,
+            toUserId: @Model.UserTo.UserId,
+            messageText: messageText,
+            sentTime: new Date().toISOString()
+        };
+
+        connection.invoke("SendMessage", message).catch(function (err) {
             return console.error(err.toString());
         });
 
-        document.getElementById("sendButton").addEventListener("click", function (event) {
-            var messageText = document.getElementById("messageInput").value;
-
-            var message = {
-                fromUserId: @Model.UserCurrent.UserId,
-                toUserId: @Model.UserTo.UserId,
-                messageText: messageText,
-                sentTime: new Date()
-            };
-
-            // Gửi tin nhắn qua SignalR
-            connection.invoke("SendMessage", message).catch(function (err) {
-                return console.error(err.toString());
-            });
-            event.preventDefault();
-        });
-    </script>
+        document.getElementById("messageInput").value = '';
+        event.preventDefault();
+    });
+</script>
 }
