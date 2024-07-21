@@ -33,19 +33,20 @@ namespace WEB.Pages
 
                 if (u != null)
                 {
-                    
+
                     var session = HttpContext.Session;
-                    if(u.Status == StatusCommon.InActive.ToString())
+                    if (u.Status == StatusCommon.InActive.ToString())
                     {
                         Mess = "your account is baned!";
                         return Page();
-                    } else if(u.Status == StatusCommon.Active.ToString())
+                    }
+                    else if (u.Status == StatusCommon.NotVerified.ToString())
                     {
                         string otp = Helper.GenerateOTP();
                         SaveOTPInSession(otp);
                         Services.EmailSender ed = new Services.EmailSender();
                         Extenstions.SessionExtensions.Set<User>(HttpContext.Session, "UserVeri", u);
-
+                        u.Status = StatusCommon.Active.ToString();
                         ed.SendEmail(u.Email, "Veri Account", "You OTP Authentication: " + otp);
                         return RedirectToPage("/VeryPages");
                     }
@@ -57,7 +58,7 @@ namespace WEB.Pages
                             return RedirectToPage("/Admin/Index");
                         }
                     }
-                    return RedirectToPage("/Index"); 
+                    return RedirectToPage("/Index");
                 }
                 else
                 {

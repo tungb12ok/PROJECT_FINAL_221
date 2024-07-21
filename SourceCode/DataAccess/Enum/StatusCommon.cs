@@ -9,6 +9,7 @@ namespace DataAccess.Enum
     public enum StatusCommon
     {
         Active,
-        InActive
+        InActive,
+        NotVerified
     }
 }
