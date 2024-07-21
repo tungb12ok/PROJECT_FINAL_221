@@ -11,6 +11,7 @@ namespace WEB.Pages
     {
         private readonly ILogger<SignUpModel> _logger;
         private UserRepository uRepo = new UserRepository();
+        private WalletRepository walletRepo = new WalletRepository();
         [BindProperty]
         public User User { get; set; }
 
@@ -37,6 +38,7 @@ namespace WEB.Pages
                     if (uSignUp != null)
                     {
                         User.UserId = uSignUp.UserId;
+                        walletRepo.AddWallet(uSignUp);
                         ViewData["Message"] = "SignUp successfuly!";
                         string otp = GenerateOTP();
                         SaveOTPInSession(otp);
