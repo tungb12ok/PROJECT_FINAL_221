@@ -1,3 +1,4 @@
+using DataAccess.Enum;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -22,7 +23,7 @@ namespace WEB.Pages
             Product = _context.Products
                 .Include(x => x.ProductImages)
                 .Include(x => x.User)
-                .FirstOrDefault(x => x.ProductId == id && x.StatusId == 1);
+                .FirstOrDefault(x => x.ProductId == id && x.Status == StatusCommon.Active.ToString());
             if (Product == null)
             {
                 return Redirect("/Index");
@@ -47,14 +48,14 @@ namespace WEB.Pages
                 BuyerId = u.UserId,
                 SellerId = uId,
                 Amount = p + 250000 + 10000,
-                StatusId = 11
+                Status = TransactionStatus.Successful.ToString()
             };
             try
             {
                 _context.Transactions.Add(t);
                 _context.SaveChanges();
                 Shipped.TransactionId = t.TransactionId;
-                Shipped.StatusId = 11;
+                Shipped.Status = StatusProcess.Pending.ToString();
                 Shipped.AddressType = "";
                 _context.UserShippeds.Add(Shipped);
                 _context.SaveChanges();

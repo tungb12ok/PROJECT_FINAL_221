@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Configuration;
 
 namespace DataAccess.Models
 {
@@ -25,7 +24,6 @@ namespace DataAccess.Models
         public virtual DbSet<ProductImage> ProductImages { get; set; } = null!;
         public virtual DbSet<ProductReview> ProductReviews { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
-        public virtual DbSet<Status> Statuses { get; set; } = null!;
         public virtual DbSet<Transaction> Transactions { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
         public virtual DbSet<UserShipped> UserShippeds { get; set; } = null!;
@@ -35,12 +33,9 @@ namespace DataAccess.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-                string ConnectionStr = config.GetConnectionString("DB");
-
-                optionsBuilder.UseSqlServer(ConnectionStr);
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("server =localhost,1433; database = QuickMarket;User Id=sa;Password=Tungld123@;Encrypt=false;TrustServerCertificate=true");
             }
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -81,9 +76,7 @@ namespace DataAccess.Models
 
                 entity.Property(e => e.Description).HasColumnType("text");
 
-                entity.Property(e => e.Status)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.Status).HasMaxLength(50);
 
                 entity.Property(e => e.TransactionDate).HasColumnType("datetime");
 
@@ -137,7 +130,7 @@ namespace DataAccess.Models
 
                 entity.Property(e => e.DatePosted).HasColumnType("datetime");
 
-                entity.Property(e => e.Description).HasColumnType("text");
+                entity.Property(e => e.Description).HasMaxLength(2000);
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(255)
@@ -145,7 +138,7 @@ namespace DataAccess.Models
 
                 entity.Property(e => e.Price).HasColumnType("decimal(10, 2)");
 
-                entity.Property(e => e.StatusId).HasColumnName("StatusID");
+                entity.Property(e => e.Status).HasMaxLength(50);
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 
@@ -153,12 +146,6 @@ namespace DataAccess.Models
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.CategoryId)
                     .HasConstraintName("FK_Products_ProductCategories");
-
-                entity.HasOne(d => d.Status)
-                    .WithMany(p => p.Products)
-                    .HasForeignKey(d => d.StatusId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Products_Status");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Products)
@@ -169,7 +156,7 @@ namespace DataAccess.Models
             modelBuilder.Entity<ProductCategory>(entity =>
             {
                 entity.HasKey(e => e.CategoryId)
-                    .HasName("PK__ProductC__19093A2B56C91AF7");
+                    .HasName("PK__ProductC__19093A2BCD6A00CA");
 
                 entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
 
@@ -179,16 +166,13 @@ namespace DataAccess.Models
 
                 entity.Property(e => e.Description).HasColumnType("text");
 
-                entity.HasOne(d => d.Status)
-                    .WithMany(p => p.ProductCategories)
-                    .HasForeignKey(d => d.StatusId)
-                    .HasConstraintName("FK_ProductCategories_Status");
+                entity.Property(e => e.StatusId).HasMaxLength(50);
             });
 
             modelBuilder.Entity<ProductImage>(entity =>
             {
                 entity.HasKey(e => e.ImageId)
-                    .HasName("PK__ProductI__7516F4EC4341A81A");
+                    .HasName("PK__ProductI__7516F4EC3EE35786");
 
                 entity.Property(e => e.ImageId).HasColumnName("ImageID");
 
@@ -216,7 +200,7 @@ namespace DataAccess.Models
 
                 entity.Property(e => e.ReviewId).HasColumnName("ReviewID");
 
-                entity.Property(e => e.Comment).HasColumnType("text");
+                entity.Property(e => e.Comment).HasMaxLength(2000);
 
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
@@ -251,17 +235,6 @@ namespace DataAccess.Models
                 entity.Property(e => e.RoleName).HasMaxLength(50);
             });
 
-            modelBuilder.Entity<Status>(entity =>
-            {
-                entity.ToTable("Status");
-
-                entity.Property(e => e.StatusId).HasColumnName("StatusID");
-
-                entity.Property(e => e.Description).HasMaxLength(500);
-
-                entity.Property(e => e.StatusName).HasMaxLength(50);
-            });
-
             modelBuilder.Entity<Transaction>(entity =>
             {
                 entity.Property(e => e.TransactionId).HasColumnName("TransactionID");
@@ -274,9 +247,9 @@ namespace DataAccess.Models
 
                 entity.Property(e => e.SellerId).HasColumnName("SellerID");
 
-                entity.Property(e => e.TransactionDate)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.Status).HasMaxLength(50);
+
+                entity.Property(e => e.TransactionDate).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Buyer)
                     .WithMany(p => p.TransactionBuyers)
@@ -292,12 +265,6 @@ namespace DataAccess.Models
                     .WithMany(p => p.TransactionSellers)
                     .HasForeignKey(d => d.SellerId)
                     .HasConstraintName("FK__Transacti__Selle__4BAC3F29");
-
-                entity.HasOne(d => d.Status)
-                    .WithMany(p => p.Transactions)
-                    .HasForeignKey(d => d.StatusId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Transactions_Status");
             });
 
             modelBuilder.Entity<User>(entity =>
@@ -329,6 +296,8 @@ namespace DataAccess.Models
 
                 entity.Property(e => e.RoldeId).HasColumnName("RoldeID");
 
+                entity.Property(e => e.Status).HasMaxLength(50);
+
                 entity.Property(e => e.Username)
                     .HasMaxLength(255)
                     .IsUnicode(false);
@@ -338,11 +307,6 @@ namespace DataAccess.Models
                     .HasForeignKey(d => d.RoldeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Users_Role");
-
-                entity.HasOne(d => d.Status)
-                    .WithMany(p => p.Users)
-                    .HasForeignKey(d => d.StatusId)
-                    .HasConstraintName("FK_Users_Status");
             });
 
             modelBuilder.Entity<UserShipped>(entity =>
@@ -356,42 +320,25 @@ namespace DataAccess.Models
                     .ValueGeneratedNever()
                     .HasColumnName("TransactionID");
 
-                entity.Property(e => e.AddressLine1)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                entity.Property(e => e.AddressLine1).HasMaxLength(500);
 
-                entity.Property(e => e.AddressLine2)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                entity.Property(e => e.AddressLine2).HasMaxLength(500);
 
-                entity.Property(e => e.AddressType)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.AddressType).HasMaxLength(500);
 
-                entity.Property(e => e.City)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
+                entity.Property(e => e.City).HasMaxLength(500);
 
-                entity.Property(e => e.Country)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
+                entity.Property(e => e.Country).HasMaxLength(500);
 
                 entity.Property(e => e.DateAdded)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.PostalCode)
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
+                entity.Property(e => e.PostalCode).HasMaxLength(500);
 
-                entity.Property(e => e.State)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
+                entity.Property(e => e.State).HasMaxLength(500);
 
-                entity.HasOne(d => d.Status)
-                    .WithMany(p => p.UserShippeds)
-                    .HasForeignKey(d => d.StatusId)
-                    .HasConstraintName("FK_UserShipped_Status");
+                entity.Property(e => e.Status).HasMaxLength(50);
 
                 entity.HasOne(d => d.Transaction)
                     .WithOne(p => p.UserShipped)

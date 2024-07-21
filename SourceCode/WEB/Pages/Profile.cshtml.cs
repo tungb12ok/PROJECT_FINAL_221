@@ -68,7 +68,6 @@ namespace WEB.Pages
         }
         public IActionResult OnPostPaid()
         {
-            CheckingPayment c = new CheckingPayment();
             var financialTrans = new FinancialTransaction
             {
                 UserId = User.UserId,

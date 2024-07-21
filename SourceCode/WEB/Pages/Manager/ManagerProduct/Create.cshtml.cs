@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using DataAccess.Models;
+using DataAccess.Enum;
 
 namespace WEB.Pages.UserManager.ManagerProduct
 {
@@ -20,8 +21,11 @@ namespace WEB.Pages.UserManager.ManagerProduct
 
         public IActionResult OnGet()
         {
+            List<StatusCommon> statusList = Enum.GetValues(typeof(StatusCommon))
+                                           .Cast<StatusCommon>()
+                                           .ToList();
+            ViewData["StatusId"] = new SelectList(statusList);
             ViewData["CategoryId"] = new SelectList(_context.ProductCategories, "CategoryId", "CategoryName");
-            ViewData["StatusId"] = new SelectList(_context.Statuses, "StatusId", "StatusName");
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Username");
             return Page();
         }

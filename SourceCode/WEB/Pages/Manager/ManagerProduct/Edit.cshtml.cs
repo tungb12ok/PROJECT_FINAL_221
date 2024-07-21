@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
+using DataAccess.Enum;
 
 namespace WEB.Pages.UserManager.ManagerProduct
 {
@@ -46,7 +47,10 @@ namespace WEB.Pages.UserManager.ManagerProduct
             ImageUrls = product.ProductImages.Select(x => x.ImageUrl).ToList();
 
             ViewData["CategoryId"] = new SelectList(_context.ProductCategories, "CategoryId", "CategoryName");
-            ViewData["StatusId"] = new SelectList(_context.Statuses, "StatusId", "StatusName");
+            List<StatusCommon> statusList = Enum.GetValues(typeof(StatusCommon))
+                                           .Cast<StatusCommon>()
+                                           .ToList();
+            ViewData["StatusId"] = new SelectList(statusList);
             ViewData["UserId"] = U;
 
             return Page();
@@ -67,7 +71,7 @@ namespace WEB.Pages.UserManager.ManagerProduct
             productToUpdate.Description = Product.Description;
             productToUpdate.Price = Product.Price;
             productToUpdate.CategoryId = Product.CategoryId;
-            productToUpdate.StatusId = Product.StatusId;
+            productToUpdate.Status = Product.Status;
 
             // Cập nhật các URL hình ảnh
             productToUpdate.ProductImages.Clear();

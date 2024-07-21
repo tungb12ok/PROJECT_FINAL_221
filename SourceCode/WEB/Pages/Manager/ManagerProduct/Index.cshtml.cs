@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
-using DocumentFormat.OpenXml.Office2010.Excel;
+using DataAccess.Enum;
 
 namespace WEB.Pages.UserManager.ManagerProduct
 {
@@ -34,8 +34,8 @@ namespace WEB.Pages.UserManager.ManagerProduct
             if (user.RoldeId != 1)
             {
                 Product = await _context.Products
+                    .Include(p => p.User)
                     .Include(p => p.Category)
-                    .Include(p => p.Status)
                     .Where(p => p.UserId == user.UserId)
                     .ToListAsync();
             }
@@ -43,7 +43,6 @@ namespace WEB.Pages.UserManager.ManagerProduct
             {
                 Product = await _context.Products
                     .Include(p => p.Category)
-                    .Include(p => p.Status)
                     .ToListAsync();
             }
 
@@ -64,7 +63,7 @@ namespace WEB.Pages.UserManager.ManagerProduct
             }
             else
             {
-                product.StatusId = 1;
+                product.Status = StatusCommon.Active.ToString();
                 _context.SaveChanges();
             }
             Mess = "Update Success";

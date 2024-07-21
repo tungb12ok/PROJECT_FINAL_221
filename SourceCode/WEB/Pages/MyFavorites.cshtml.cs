@@ -1,5 +1,5 @@
-﻿using DataAccess.Models;
-using DocumentFormat.OpenXml.Wordprocessing;
+﻿using DataAccess.Enum;
+using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +31,7 @@ namespace WEB.Pages
             Favorites = _context.Favorites
                 .Include(x => x.Product.ProductImages)
                 .Include(x => x.User)
-                .Where(x => x.UserId == u.UserId && x.Product.StatusId == 1)
+                .Where(x => x.UserId == u.UserId && x.Product.Status == StatusCommon.Active.ToString())
                 .ToList();
             if (Favorites == null)
             {

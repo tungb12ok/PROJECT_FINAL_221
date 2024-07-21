@@ -25,7 +25,7 @@ namespace WEB.Pages.Manager.Categories
             if (_context.ProductCategories != null)
             {
                 ProductCategory = await _context.ProductCategories
-                .Include(p => p.Status).ToListAsync();
+                .ToListAsync();
             }
         }
     }

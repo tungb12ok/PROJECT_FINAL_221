@@ -1,3 +1,4 @@
+using DataAccess.Enum;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -42,7 +43,7 @@ namespace WEB.Pages
                         .Products
                         .Include(x => x.ProductImages)
                         .Include(x => x.User)
-                        .FirstOrDefault(x => x.ProductId == id && x.StatusId == 1);
+                        .FirstOrDefault(x => x.ProductId == id && x.Status == StatusCommon.Active.ToString());
             if (Product == null)
             {
                 TempData["mess"] = "Product not found!";

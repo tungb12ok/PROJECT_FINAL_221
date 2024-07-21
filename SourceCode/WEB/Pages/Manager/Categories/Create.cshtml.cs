@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using DataAccess.Models;
+using DataAccess.Enum;
 
 namespace WEB.Pages.Manager.Categories
 {
@@ -20,7 +21,10 @@ namespace WEB.Pages.Manager.Categories
 
         public IActionResult OnGet()
         {
-        ViewData["StatusId"] = new SelectList(_context.Statuses, "StatusId", "StatusName");
+            List<StatusCommon> statusList = Enum.GetValues(typeof(StatusCommon))
+                                             .Cast<StatusCommon>()
+                                             .ToList();
+            ViewData["StatusId"] = new SelectList(statusList);
             return Page();
         }
 

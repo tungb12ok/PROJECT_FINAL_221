@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
+using DataAccess.Enum;
 
 namespace WEB.Pages.Manager.Categories
 {
@@ -35,7 +36,10 @@ namespace WEB.Pages.Manager.Categories
                 return NotFound();
             }
             ProductCategory = productcategory;
-           ViewData["StatusId"] = new SelectList(_context.Statuses, "StatusId", "StatusName");
+            List<StatusCommon> statusList = Enum.GetValues(typeof(StatusCommon))
+                                           .Cast<StatusCommon>()
+                                           .ToList();
+            ViewData["StatusId"] = new SelectList(statusList);
             return Page();
         }
 

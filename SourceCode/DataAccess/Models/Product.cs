@@ -20,10 +20,9 @@ namespace DataAccess.Models
         public string? Description { get; set; }
         public decimal Price { get; set; }
         public DateTime DatePosted { get; set; }
-        public int StatusId { get; set; }
+        public string Status { get; set; } = null!;
 
         public virtual ProductCategory? Category { get; set; }
-        public virtual Status Status { get; set; } = null!;
         public virtual User? User { get; set; }
         public virtual ICollection<Favorite> Favorites { get; set; }
         public virtual ICollection<ProductImage> ProductImages { get; set; }

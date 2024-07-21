@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using DataAccess.Models;
 using WEB.Extenstions;
+using DataAccess.Enum;
 namespace WEB.Pages
 {
     public class VeryPagesModel : PageModel
@@ -51,7 +52,7 @@ namespace WEB.Pages
                     if (otp == OPT)
                     {
                         User uUdate = _context.Users.FirstOrDefault(x => x.UserId == u.UserId);
-                        uUdate.StatusId = 7;
+                        uUdate.Status = StatusCommon.Active.ToString();
                         _context.SaveChanges();
                         Extenstions.SessionExtensions.Set<User>(HttpContext.Session, "User", uUdate);
                         return RedirectToPage("/Index");

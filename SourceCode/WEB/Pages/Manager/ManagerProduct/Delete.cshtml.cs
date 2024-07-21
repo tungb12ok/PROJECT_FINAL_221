@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
+using DataAccess.Enum;
 
 namespace WEB.Pages.UserManager.ManagerProduct
 {
@@ -40,7 +41,7 @@ namespace WEB.Pages.UserManager.ManagerProduct
             else
             {
                 Product = product;
-                product.StatusId = 2;
+                product.Status = StatusCommon.InActive.ToString();
                 _context.SaveChanges();
             }
             Mess = "Update Success";

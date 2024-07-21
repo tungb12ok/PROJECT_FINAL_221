@@ -11,12 +11,11 @@ namespace DataAccess.Models
         public int? ProductId { get; set; }
         public DateTime TransactionDate { get; set; }
         public decimal Amount { get; set; }
-        public int StatusId { get; set; }
+        public string Status { get; set; } = null!;
 
         public virtual User? Buyer { get; set; }
         public virtual Product? Product { get; set; }
         public virtual User? Seller { get; set; }
-        public virtual Status Status { get; set; } = null!;
         public virtual UserShipped? UserShipped { get; set; }
     }
 }

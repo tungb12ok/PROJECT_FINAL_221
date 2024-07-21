@@ -1,4 +1,5 @@
 ﻿using BussinessLogic.Repository;
+using DataAccess.Enum;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -25,7 +26,7 @@ namespace WEB.Pages
         }
         public IActionResult OnPost()
         {
-            User.StatusId = 10;
+            User.Status = StatusCommon.Active.ToString();
             User.DateCreated = DateTime.Now;
             User.RoldeId = 3;
             if (User != null)

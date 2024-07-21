@@ -24,7 +24,6 @@
   <ItemGroup>
     <ProjectReference Include="..\BussinessLogic\BussinessLogic.csproj" />
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
-    <ProjectReference Include="..\Exe\Exe.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,6 +38,10 @@
     <AdditionalFiles Include="Pages\Manager\ManagerProduct\Delete.cshtml" />
     <AdditionalFiles Include="Pages\Manager\ManagerProduct\Edit.cshtml" />
     <AdditionalFiles Include="Pages\Manager\ManagerProduct\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
 </Project>

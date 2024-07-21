@@ -24,10 +24,9 @@ namespace DataAccess.Models
         public DateTime DateCreated { get; set; }
         public DateTime? LastLogin { get; set; }
         public int RoldeId { get; set; }
-        public int? StatusId { get; set; }
+        public string? Status { get; set; }
 
         public virtual Role Rolde { get; set; } = null!;
-        public virtual Status? Status { get; set; }
         public virtual Wallet? Wallet { get; set; }
         public virtual ICollection<Favorite> Favorites { get; set; }
         public virtual ICollection<FinancialTransaction> FinancialTransactions { get; set; }

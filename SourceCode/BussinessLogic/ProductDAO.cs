@@ -1,4 +1,5 @@
 ﻿using BussinessLogic.Repository;
+using DataAccess.Enum;
 using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -65,7 +66,7 @@ namespace BussinessLogic
                 products = context.Products.Where(x => x.Price <= max).ToList();
 
             }
-            products = products.Where(x => x.StatusId == 1).ToList();
+            products = products.Where(x => x.Status == StatusCommon.Active.ToString()).ToList();
             return products;
         }
     }

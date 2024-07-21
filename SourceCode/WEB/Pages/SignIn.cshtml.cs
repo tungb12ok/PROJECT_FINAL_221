@@ -1,3 +1,4 @@
+using DataAccess.Enum;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -34,11 +35,11 @@ namespace WEB.Pages
                 {
                     
                     var session = HttpContext.Session;
-                    if(u.StatusId == 8)
+                    if(u.Status == StatusCommon.InActive.ToString())
                     {
                         Mess = "your account is baned!";
                         return Page();
-                    } else if(u.StatusId == 10)
+                    } else if(u.Status == StatusCommon.Active.ToString())
                     {
                         string otp = Helper.GenerateOTP();
                         SaveOTPInSession(otp);
@@ -56,7 +57,7 @@ namespace WEB.Pages
                             return RedirectToPage("/Admin/Index");
                         }
                     }
-                    return RedirectToPage("/Index"); // Redirect to a success page
+                    return RedirectToPage("/Index"); 
                 }
                 else
                 {

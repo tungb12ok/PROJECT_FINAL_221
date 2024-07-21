@@ -72,7 +72,7 @@
                         @item.Seller.Username
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Status.StatusName)
+                        @Html.DisplayFor(modelItem => item.Status)
                     </td>
                     @if (ViewBag.U.UserId == @item.Buyer.UserId)
                     {

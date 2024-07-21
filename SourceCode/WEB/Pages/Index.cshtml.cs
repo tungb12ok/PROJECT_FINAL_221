@@ -7,8 +7,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Identity;
 using BussinessLogic.Repository;
 using BussinessLogic;
-using DocumentFormat.OpenXml.InkML;
-using DocumentFormat.OpenXml.Wordprocessing;
+using DataAccess.Enum;
 
 namespace WEB.Pages
 {
@@ -84,7 +83,6 @@ namespace WEB.Pages
 
                 .Include(x => x.User)
                     .Include(x => x.Category)
-                    .Include(x => x.Status)
                     .Include(x => x.ProductImages)
                     .ToList();
 
@@ -94,7 +92,6 @@ namespace WEB.Pages
             {
                 products = _context.Products                    
                     .Include(x => x.Category)
-                    .Include(x => x.Status)
                     .Include(x => x.ProductImages)
                     .Where(x => x.CategoryId == cateId).ToList();
 
@@ -119,7 +116,7 @@ namespace WEB.Pages
                 products = _context.Products.Where(x => x.Price <= max).ToList();
 
             }
-            products = products.Where(x => x.StatusId == 1).ToList();
+            products = products.Where(x => x.Status == StatusCommon.Active.ToString()).ToList();
             return products;
         }
     }
