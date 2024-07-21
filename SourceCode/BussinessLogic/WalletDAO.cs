@@ -77,5 +77,16 @@ namespace BussinessLogic
             }
             return false;
         }
+        
+        public Wallet AddWallet(User user)
+        {
+            Wallet wallet = new Wallet
+            {
+                UserId = user.UserId,
+                Balance = 0,
+                LastUpdate = DateTime.Now,
+            };
+            return wallet;
+        }
     }
 }

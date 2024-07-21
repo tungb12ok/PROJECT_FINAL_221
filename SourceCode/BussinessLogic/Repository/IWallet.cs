@@ -11,5 +11,6 @@ namespace BussinessLogic.Repository
     {
         public bool topUpMoney(int userID, decimal amount);
         public bool topDownMoney(int UserID, decimal amount);
+        public Wallet AddWallet(User user);
     }
 }

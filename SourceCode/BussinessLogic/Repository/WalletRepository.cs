@@ -12,5 +12,6 @@ namespace BussinessLogic.Repository
         public bool topDownMoney(int userID, decimal amount) => WalletDAO.Instance.topDownMoney(userID, amount);
 
         public bool topUpMoney(int userID, decimal amount) => WalletDAO.Instance.topUpMoney(userID, amount);
+        public Wallet AddWallet(User user) => WalletDAO.Instance.AddWallet(user);
     }
 }
