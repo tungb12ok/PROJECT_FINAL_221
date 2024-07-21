@@ -35,6 +35,7 @@ namespace WEB.Pages.UserManager.ManagerProduct
             }
 
             var product = await _context.Products
+                                        .Include(p => p.User)
                                         .Include(p => p.ProductImages)
                                         .FirstOrDefaultAsync(m => m.ProductId == id);
 

@@ -48,7 +48,7 @@ namespace WEB.Pages
                 BuyerId = u.UserId,
                 SellerId = uId,
                 Amount = p + 250000 + 10000,
-                Status = TransactionStatus.Successful.ToString()
+                Status = TransactionStatus.Pending.ToString()
             };
             try
             {

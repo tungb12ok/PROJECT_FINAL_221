@@ -16,9 +16,9 @@ ViewData["Title"] = "Edit";
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Product.ProductId" />
             <div class="form-group">
-                <label asp-for="Product.UserId" class="control-label"></label>
-                <input readonly asp-for="Product.UserId" class="form-control" />
-                <span asp-validation-for="Product.UserId" class="text-danger"></span>
+                <label asp-for="Product.User.Username" class="control-label"></label>
+                <input readonly asp-for="Product.User.Username" class="form-control" />
+                <span asp-validation-for="Product.User.Username" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Product.CategoryId" class="control-label"></label>

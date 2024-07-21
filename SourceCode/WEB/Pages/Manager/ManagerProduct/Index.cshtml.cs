@@ -42,6 +42,7 @@ namespace WEB.Pages.UserManager.ManagerProduct
             else
             {
                 Product = await _context.Products
+                    .Include(p => p.User)
                     .Include(p => p.Category)
                     .ToListAsync();
             }
