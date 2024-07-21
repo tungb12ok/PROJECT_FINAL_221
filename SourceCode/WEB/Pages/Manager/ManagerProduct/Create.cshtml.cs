@@ -24,7 +24,7 @@ namespace WEB.Pages.UserManager.ManagerProduct
             List<StatusCommon> statusList = Enum.GetValues(typeof(StatusCommon))
                                            .Cast<StatusCommon>()
                                            .ToList();
-            ViewData["StatusId"] = new SelectList(statusList);
+            ViewData["StatusId"] = new SelectList(statusList.Select(status => new { Value = status, Text = status.ToString() }), "Value", "Text");
             ViewData["CategoryId"] = new SelectList(_context.ProductCategories, "CategoryId", "CategoryName");
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Username");
             return Page();
@@ -44,6 +44,7 @@ namespace WEB.Pages.UserManager.ManagerProduct
             }
             User user = Extenstions.SessionExtensions.Get<User>(HttpContext.Session, "User");
             Product.UserId = user.UserId;
+            Product.DatePosted = DateTime.Now;
             _context.Products.Add(Product);
             await _context.SaveChangesAsync();
 
