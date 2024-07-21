@@ -93,7 +93,7 @@
                     <div class="card-body">
                         <a asp-page="ProductDetails" asp-route-id="@product.ProductId" class="text-decoration-none">
                             <h2 class="card-title h5">@product.Name</h2>
-                            <p class="card-text text-muted">@((product.Description.Length > 30 ? product.Description.Substring(0, 30) : product.Description) + "...")</p>
+                                <p class="card-text text-muted">@((product.Description.Length > 30 ? (product.Description.Substring(0, 30) + "...") : product.Description))</p>
                         </a>
                         <span class="text-success fw-bold">@DataAccess.ViewModel.FormatViewModel.GetFormatVND(@product.Price) VND</span>
                         <div class="d-flex mt-3 gap-2">
