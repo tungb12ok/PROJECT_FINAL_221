@@ -70,6 +70,7 @@ namespace WEB.Pages
                 {
                     mode = "hideUsername";
                     TempData["mess"] = "OPT incorrect!";
+                    return RedirectToPage("/ForgotPassword", new { Username = u.Username });
                 }
             }
             return Page();

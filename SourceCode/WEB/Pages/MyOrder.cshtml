@@ -1,0 +1,40 @@
+﻿@page
+@model WEB.Pages.MyOrderModel
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<h2>My Orders</h2>
+
+@if (Model.MyOrder != null && Model.MyOrder.Count > 0)
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Product Name</th>
+                <th>Seller</th>
+                <th>Amount</th>
+                <th>Transaction Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model.MyOrder)
+            {
+                <tr>
+                    <td>@order.TransactionId</td>
+                    <td>@order.Product?.Name</td>
+                    <td>@order.Seller?.Username</td>
+                    <td>@order.Amount</td>
+                    <td>@order.TransactionDate.ToString("dd/MM/yyyy")</td>
+                    <td>@order.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>You have no orders.</p>
+}
