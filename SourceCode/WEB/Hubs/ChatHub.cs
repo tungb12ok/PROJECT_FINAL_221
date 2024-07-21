@@ -1,5 +1,6 @@
 ﻿using DataAccess.Models;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using WEB.Extenstions;
 
 namespace WEB.Hubs
@@ -17,7 +18,6 @@ namespace WEB.Hubs
             var receiver = "user" + message.ToUserId;
 
             string group = Helper.roomConnect(sender, receiver);
-
             // Send the message to the specific group
             await Clients.Group(group).SendAsync("ReceiveMessage", message);
         }

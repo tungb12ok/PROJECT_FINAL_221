@@ -106,8 +106,8 @@ ViewData["Title"] = "Chat";
             @foreach (var user in ViewBag.listView)
             {
             <form method="get">
-                <input name="receiver" value="@user.UserTo.UserId" hidden />
-                <button class="btn btn-light w-100 text-left">@user.UserTo.Username</button>
+                    <input name="receiver" value="@user.UserFrom.UserId" hidden />
+                    <button class="btn btn-light w-100 text-left">@user.UserFrom.Username</button>
             </form>
             }
         </ul>

@@ -36,10 +36,11 @@ namespace WEB.Pages
                     .Include(x => x.FromUser)
                     .Include(x => x.ToUser)
                     .ToList();
+
                     var list = _context.Messages
                                 .Include(x => x.ToUser)
                                 .Include(x => x.FromUser)
-                                .Where(x => x.FromUserId == UserCurrent.UserId)
+                                .Where(x => x.ToUserId == UserCurrent.UserId)
                                 .Select(x => new
                                 {
                                    UserFrom = x.FromUser,
